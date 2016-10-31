@@ -11,11 +11,12 @@
 static FIL fp;
 static uint8_t read_buf[90];
 static int stack[3];
+static int stackPointer;
 static struct Functions parcedFunction[numberOfFunctionsAllowed];
 
 
 void initSdCard(){
-	int number = 0;
+	int number = 0, stackPointer = 0;
 	/* open file */
 	if (FAT1_open(&fp, "./demoFile.txt", FA_READ) !=FR_OK) {
 		Err();
@@ -25,11 +26,33 @@ void initSdCard(){
 		int tmp = readLine();
 		if(UTIL1_strncmp(read_buf, "function", strlen("function"))==0){
 			parcedFunction[number].pointer = tmp;
-			parcedFunction[number].hash = getHash(&read_buf);
+			parcedFunction[number].hash = getHash(read_buf+9);
 			number++;
 		}
 		else if(UTIL1_strncmp(read_buf, "main", strlen("main"))==0){
+			 tmp = readLine();
+			 if(UTIL1_strncmp(read_buf, "Servo1", strlen("Servo1"))==0){
 
+			 }
+			 else if(UTIL1_strncmp(read_buf, "Servo2", strlen("Servo2"))==0){
+
+			 }
+			 else if(UTIL1_strncmp(read_buf, "Ultrasonic", strlen("Ultrasonic"))==0){
+
+			 }
+			 else{
+				 for(int a=0; a<number;a++){
+					 if(parcedFunction[a].hash == getHash(&read_buf)){
+						 stack[stackPointer] = tmp;
+						 stackPointer++;
+						 //go to function on file
+						 readLineOffset(parcedFunction[a].pointer); //Problem pointer shows on begin of function line
+					 }
+					 else{
+						 //nothing to Parse
+					 }
+				 }
+			 }
 		}
 		else{
 			//nothing to Parse
@@ -38,6 +61,27 @@ void initSdCard(){
 			read_buf[n]=0;
 		}
 	}
+}
+
+int readLineOffset(int pointer){
+	UINT bw;
+	int ptOfLine = fp.fptr;
+
+	char symbol = "";
+	int n = 0;
+
+	FAT1_lseek(&fp, pointer);
+
+	while(symbol != '\n') {
+		if(FAT1_read(&fp, &symbol, sizeof(symbol), &bw)!=FR_OK){
+			FAT1_close(&fp);
+			return 0;
+		}
+		read_buf[n] = symbol;
+		n++;
+	}
+	read_buf[n-1]= '\0';
+	return ptOfLine;
 }
 
 int readLine(void){

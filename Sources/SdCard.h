@@ -14,6 +14,7 @@
 void initSdCard(void);
 void writeToFile(int16_t );
 int readLine(void);
+int readLineOffset(int);
 
 void Err(void);
 
