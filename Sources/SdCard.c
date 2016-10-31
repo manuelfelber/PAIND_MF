@@ -7,11 +7,17 @@
 
 #include "SdCard.h"
 
-static FAT1_FATFS fileSystemObject;
 static FIL fp;
+static uint8_t read_buf[90];
 
 void initSdCard(){
-
+	readFromFile();
+	if(UTIL1_strncmp(read_buf, "function", strlen("function"))==0){
+		//this is a function
+	}
+	else{
+		for(;;){} //error
+	}
 }
 
 void writeToFile(int16_t number) {

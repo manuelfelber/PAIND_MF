@@ -28,16 +28,7 @@ static portTASK_FUNCTION(Task1, pvParameters) {
   (void)pvParameters; /* parameter not used */
   for(;;) {
 	//Measure();
-	for(int i=0; i<10;i++){
-		readFromFile();
-		if(UTIL1_strncmp(read_buf, "function", strlen("function"))==0){
-			//this is a function
-		}
-		else{
-			for(;;){} //error
-		}
-		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
-	}
+	initSdCard();
 	FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
   }
 }

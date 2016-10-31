@@ -17,6 +17,4 @@ void readFromFile(void);
 
 void Err(void);
 
-static uint8_t read_buf[90];
-
 #endif /* SOURCES_SDCARD_H_ */
