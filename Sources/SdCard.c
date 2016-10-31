@@ -7,6 +7,7 @@
 
 #include "SdCard.h"
 #include "Hash.h"
+#include "Huft_L.h"
 
 static FIL fp;
 static uint8_t read_buf[90];
@@ -30,32 +31,54 @@ void initSdCard(){
 			number++;
 		}
 		else if(UTIL1_strncmp(read_buf, "main", strlen("main"))==0){
-			 tmp = readLine();
-			 if(UTIL1_strncmp(read_buf, "Servo1", strlen("Servo1"))==0){
-
-			 }
-			 else if(UTIL1_strncmp(read_buf, "Servo2", strlen("Servo2"))==0){
-
-			 }
-			 else if(UTIL1_strncmp(read_buf, "Ultrasonic", strlen("Ultrasonic"))==0){
-
-			 }
-			 else{
-				 for(int a=0; a<number;a++){
-					 if(parcedFunction[a].hash == getHash(&read_buf)){
-						 stack[stackPointer] = tmp;
-						 stackPointer++;
-						 //go to function on file
-						 readLineOffset(parcedFunction[a].pointer); //Problem pointer shows on begin of function line
+			bool functionCall = false;
+			while(1){
+				 if(functionCall){
+					 functionCall = false;
+				 }
+				 else{
+					tmp = readLine();
+				 }
+				 if(UTIL1_strncmp(read_buf, "Servo1", strlen("Servo1"))==0){
+					 int value = 0;
+					 unsigned char *p = &read_buf;
+					 UTIL1_ScanSeparatedNumbers(&p,&value, 2, ' ',UTIL1_SEP_NUM_TYPE_UINT8);//to test
+					 //Huft_L_SetPos();
+				 }
+				 else if(UTIL1_strncmp(read_buf, "Ultrasonic", strlen("Ultrasonic"))==0){
+					 //to test
+				 }
+				 else if(UTIL1_strncmp(read_buf, "Wait", strlen("Wait"))==0){
+					 //to test
+				 }
+				 else if(UTIL1_strncmp(read_buf, "end", strlen("end"))==0){
+					 if(stackPointer > 0){
+						 stackPointer--;
+						 tmp = readLineOffset(stack[stackPointer]);
+						 functionCall = true;
+						 continue;
 					 }
 					 else{
-						 //nothing to Parse
+						 break; //finish parsing
 					 }
 				 }
-			 }
+				 else{
+					 for(int a=0; a<number;a++){
+						 if(parcedFunction[a].hash == getHash(&read_buf)){
+							 stack[stackPointer] = tmp;
+							 stackPointer++;
+							 //go to function on file
+							 tmp = readLineOffset(parcedFunction[a].pointer);
+							 functionCall = true;
+							 break;
+						 }
+					 }
+				 }
+			}
+			for(;;){} //finish parsing
 		}
 		else{
-			//nothing to Parse
+			//unknown header!
 		}
 		for(int n=0; n<sizeof(read_buf); n++){
 			read_buf[n]=0;
@@ -69,6 +92,9 @@ int readLineOffset(int pointer){
 
 	char symbol = "";
 	int n = 0;
+	for(int n=0; n<sizeof(read_buf); n++){
+		read_buf[n]=0;
+	}
 
 	FAT1_lseek(&fp, pointer);
 
@@ -80,6 +106,7 @@ int readLineOffset(int pointer){
 		read_buf[n] = symbol;
 		n++;
 	}
+	ptOfLine = fp.fptr;
 	read_buf[n-1]= '\0';
 	return ptOfLine;
 }
@@ -90,6 +117,10 @@ int readLine(void){
 
 	char symbol = "";
 	int n = 0;
+	for(int n=0; n<sizeof(read_buf); n++){
+		read_buf[n]=0;
+	}
+
 	while(symbol != '\n') {
 		if(FAT1_read(&fp, &symbol, sizeof(symbol), &bw)!=FR_OK){
 			FAT1_close(&fp);
@@ -98,6 +129,7 @@ int readLine(void){
 		read_buf[n] = symbol;
 		n++;
 	}
+	ptOfLine = fp.fptr;
 	read_buf[n-1]= '\0';
 	return ptOfLine;
 }
