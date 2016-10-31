@@ -6,18 +6,56 @@
  */
 
 #include "SdCard.h"
+#include "Hash.h"
 
 static FIL fp;
 static uint8_t read_buf[90];
+static int stack[3];
+static struct Functions parcedFunction[numberOfFunctionsAllowed];
+
 
 void initSdCard(){
-	readFromFile();
-	if(UTIL1_strncmp(read_buf, "function", strlen("function"))==0){
-		//this is a function
+	int number = 0;
+	/* open file */
+	if (FAT1_open(&fp, "./demoFile.txt", FA_READ) !=FR_OK) {
+		Err();
 	}
-	else{
-		for(;;){} //error
+
+	while(1){
+		int tmp = readLine();
+		if(UTIL1_strncmp(read_buf, "function", strlen("function"))==0){
+			parcedFunction[number].pointer = tmp;
+			parcedFunction[number].hash = getHash(&read_buf);
+			number++;
+		}
+		else if(UTIL1_strncmp(read_buf, "main", strlen("main"))==0){
+
+		}
+		else{
+			//nothing to Parse
+		}
+		for(int n=0; n<sizeof(read_buf); n++){
+			read_buf[n]=0;
+		}
 	}
+}
+
+int readLine(void){
+	UINT bw;
+	int ptOfLine = fp.fptr;
+
+	char symbol = "";
+	int n = 0;
+	while(symbol != '\n') {
+		if(FAT1_read(&fp, &symbol, sizeof(symbol), &bw)!=FR_OK){
+			FAT1_close(&fp);
+			return 0;
+		}
+		read_buf[n] = symbol;
+		n++;
+	}
+	read_buf[n-1]= '\0';
+	return ptOfLine;
 }
 
 void writeToFile(int16_t number) {
@@ -60,28 +98,6 @@ void writeToFile(int16_t number) {
 	/* closing file */
 	(void)FAT1_close(&fp);
 }
-
-void readFromFile(void){
-	UINT bw;
-
-	/* open file */
-	if (FAT1_open(&fp, "./demoFile.txt", FA_READ) !=FR_OK) {
-		Err();
-	}
-
-	char symbol = "";
-	int n = 0;
-	while(symbol != '\r') {
-		if(FAT1_read(&fp, &symbol, sizeof(symbol), &bw)!=FR_OK){
-			FAT1_close(&fp);
-			Err();
-		}
-		read_buf[n] = symbol;
-		n++;
-	}
-	read_buf[n-1]= '\0';
-}
-
 
 void Err(void) {
   for(;;){}

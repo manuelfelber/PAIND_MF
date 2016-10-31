@@ -6,6 +6,7 @@
  */
 
 
+
 //djb2 algorithmus http://www.cse.yorku.ca/~oz/hash.html
 unsigned long getHash(unsigned char *str){
 	unsigned long hash = 5381;

@@ -9,7 +9,7 @@
 #define SOURCES_HASH_H_
 
 
-ulong getHash(unsigned char *);
+unsigned long getHash(unsigned char *);
 
 
 #endif /* SOURCES_HASH_H_ */

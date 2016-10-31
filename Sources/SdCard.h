@@ -13,8 +13,15 @@
 
 void initSdCard(void);
 void writeToFile(int16_t );
-void readFromFile(void);
+int readLine(void);
 
 void Err(void);
+
+struct Functions{
+	int pointer;
+	unsigned long hash;
+};
+
+#define numberOfFunctionsAllowed 10
 
 #endif /* SOURCES_SDCARD_H_ */
