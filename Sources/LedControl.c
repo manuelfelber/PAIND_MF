@@ -75,7 +75,7 @@ static portTASK_FUNCTION(DotMatrixTask, pvParameters) {
 }
 
 void LedInit(){
-	if (FRTOS1_xTaskCreate(DotMatrixTask, "DotMatrix", configMINIMAL_STACK_SIZE+200, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+	if (FRTOS1_xTaskCreate(DotMatrixTask, "DotMatrix", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	    for(;;){} /* error */
 	}
 }
