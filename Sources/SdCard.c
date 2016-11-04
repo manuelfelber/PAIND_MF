@@ -19,7 +19,7 @@ static struct Functions parcedFunction[numberOfFunctionsAllowed];
 void initSdCard(){
 	int number = 0, stackPointer = 0;
 	/* open file */
-	if (FAT1_open(&fp, "./demoFile.txt", FA_READ) !=FR_OK) {
+	if (FAT1_open(&fp, "./prog2.txt", FA_READ) !=FR_OK) {
 		Err();
 	}
 
@@ -27,7 +27,7 @@ void initSdCard(){
 		int tmp = readLine();
 		if(UTIL1_strncmp(read_buf, "function", strlen("function"))==0){
 			parcedFunction[number].pointer = tmp;
-			parcedFunction[number].hash = getHash(read_buf+9);
+			parcedFunction[number].hash = getHash(read_buf+sizeof("function ")-1);
 			number++;
 		}
 		else if(UTIL1_strncmp(read_buf, "main", strlen("main"))==0){
@@ -39,16 +39,24 @@ void initSdCard(){
 				 else{
 					tmp = readLine();
 				 }
-				 if(UTIL1_strncmp(read_buf, "Servo1", strlen("Servo1"))==0){
-					 int value = 0;
-					 unsigned char *p = &read_buf;
-					 UTIL1_ScanSeparatedNumbers(&p,&value, 2, ' ',UTIL1_SEP_NUM_TYPE_UINT8);//to test
-					 //Huft_L_SetPos();
+				 if(UTIL1_strncmp(read_buf, "servo1", strlen("servo1"))==0){
+					 uint32_t pos = 0, time = 0;
+					 const unsigned char *p = read_buf + sizeof("servo1 ")-1;
+					 if(UTIL1_xatoi(&p, &pos)!=ERR_OK) {
+						 Err(); //error
+					 }
+					 if(UTIL1_xatoi(&p, &time)!=ERR_OK) {
+						 Err(); //error
+					 }
+					 if(pos > 255 && time < 0){ //check parameter range
+						 Err();
+					 }
+					 Huft_L_SetPos(pos);
 				 }
-				 else if(UTIL1_strncmp(read_buf, "Ultrasonic", strlen("Ultrasonic"))==0){
+				 else if(UTIL1_strncmp(read_buf, "ultrasonic", strlen("ultrasonic"))==0){
 					 //to test
 				 }
-				 else if(UTIL1_strncmp(read_buf, "Wait", strlen("Wait"))==0){
+				 else if(UTIL1_strncmp(read_buf, "wait", strlen("wait"))==0){
 					 //to test
 				 }
 				 else if(UTIL1_strncmp(read_buf, "end", strlen("end"))==0){
