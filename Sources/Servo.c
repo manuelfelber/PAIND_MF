@@ -25,9 +25,9 @@ static void ServoTask(void *pvParameters){
 
 
 void Servo_Init(void){
-  if (FRTOS1_xTaskCreate(ServoTask, "Servo", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
-    for(;;){} /* error */
-  }
+  /*if (FRTOS1_xTaskCreate(ServoTask, "Servo", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
+    for(;;){} //error
+  }*/
 }
 
 

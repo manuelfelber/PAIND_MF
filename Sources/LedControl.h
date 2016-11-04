@@ -13,6 +13,9 @@
 #include "CLS1.h"
 
 #define DOTMATRIX_PARSE_COMMAND_ENABLED         1
+/* predefined commands */
+#define DOT_CMD_HELP   "help"
+#define DOT_CMD_STATUS "status"
 
 /* The array for shifting the data to the devices */
 char spidata[16];

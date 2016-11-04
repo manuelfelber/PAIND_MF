@@ -51,6 +51,7 @@
 #include "Pwm6.h"
 #include "PwmLdd6.h"
 #include "FRTOS1.h"
+#include "RTOSCNTRLDD1.h"
 #include "SPI_CS.h"
 #include "BitIoLdd9.h"
 #include "SM1.h"

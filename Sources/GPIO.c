@@ -32,9 +32,9 @@ static void GPIOTask(void *pvParameters){
 
 
 void GPIO_Init(void){
-  if (FRTOS1_xTaskCreate(GPIOTask, "GPIOs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
-    for(;;){} /* error */
-  }
+  /*if (FRTOS1_xTaskCreate(GPIOTask, "GPIOs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
+    for(;;){} //error
+  }*/
 }
 
 
