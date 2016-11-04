@@ -24,11 +24,22 @@
 #include "SdCard.h"
 
 
-static portTASK_FUNCTION(Task1, pvParameters) {
+static portTASK_FUNCTION(mainApp, pvParameters) {
   (void)pvParameters; /* parameter not used */
+
+  //parse file
+  initSdCard();
+
   for(;;) {
+	//ultrasonic mesure distance
 	//Measure();
-	initSdCard();
+
+	//show moving eye
+	/*for(int i = 0; i < 2;i++) {
+		FRTOS1_vTaskDelay(2000/portTICK_RATE_MS);
+		LedShowEye(i);
+	}*/
+	//FRTOS1_taskYIELD();
 	FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
   }
 }
@@ -45,11 +56,11 @@ void APP_Run(void){
 	BLAU_Off();
 
 	if (FRTOS1_xTaskCreate(
-		Task1,  /* pointer to the task */
-		"Task1", /* task name for kernel awareness debugging */
+		mainApp,  /* pointer to the task */
+		"MainAPP", /* task name for kernel awareness debugging */
 		configMINIMAL_STACK_SIZE, /* task stack size */
 		(void*)NULL, /* optional task startup argument */
-		tskIDLE_PRIORITY,  /* initial priority */
+		tskIDLE_PRIORITY+1,  /* initial priority */
 		(xTaskHandle*)NULL /* optional task handle to create */
 	  ) != pdPASS) {
 	/*lint -e527 */

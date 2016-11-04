@@ -8,6 +8,7 @@
 #include "SdCard.h"
 #include "Hash.h"
 #include "Huft_L.h"
+#include "CLS1.h"
 
 static FIL fp;
 static uint8_t read_buf[90];
@@ -19,8 +20,12 @@ static struct Functions parcedFunction[numberOfFunctionsAllowed];
 void initSdCard(){
 	int number = 0, stackPointer = 0;
 	/* open file */
-	if (FAT1_open(&fp, "./prog2.txt", FA_READ) !=FR_OK) {
-		Err();
+	/*if (FAT1_open(&fp, "./prog2.txt", FA_READ) !=FR_OK) {
+		Err(errorOpenFile);
+	}*/
+	uint8_t status = FR_DISK_ERR;
+	while(status != FR_OK){
+		status = FAT1_open(&fp, "./prog2.txt", FA_READ);
 	}
 
 	while(1){
@@ -43,13 +48,13 @@ void initSdCard(){
 					 uint32_t pos = 0, time = 0;
 					 const unsigned char *p = read_buf + sizeof("servo1 ")-1;
 					 if(UTIL1_xatoi(&p, &pos)!=ERR_OK) {
-						 Err(); //error
+						 Err(errorAtoi); //error
 					 }
 					 if(UTIL1_xatoi(&p, &time)!=ERR_OK) {
-						 Err(); //error
+						 Err(errorAtoi); //error
 					 }
 					 if(pos > 255 && time < 0){ //check parameter range
-						 Err();
+						 Err(errorCheckRange);
 					 }
 					 Huft_L_SetPos(pos);
 				 }
@@ -83,7 +88,9 @@ void initSdCard(){
 					 }
 				 }
 			}
-			for(;;){} //finish parsing
+			/* closing file */
+			(void)FAT1_close(&fp);
+			return; //finish parsing
 		}
 		else{
 			//unknown header!
@@ -98,7 +105,7 @@ int readLineOffset(int pointer){
 	UINT bw;
 	int ptOfLine = fp.fptr;
 
-	char symbol = "";
+	char symbol = 'a';
 	int n = 0;
 	for(int n=0; n<sizeof(read_buf); n++){
 		read_buf[n]=0;
@@ -123,7 +130,7 @@ int readLine(void){
 	UINT bw;
 	int ptOfLine = fp.fptr;
 
-	char symbol = "";
+	char symbol = 'a';
 	int n = 0;
 	for(int n=0; n<sizeof(read_buf); n++){
 		read_buf[n]=0;
@@ -150,18 +157,18 @@ void writeToFile(int16_t number) {
 
 	/* open file */
 	if (FAT1_open(&fp, "./test2.txt", FA_OPEN_ALWAYS|FA_WRITE)!=FR_OK) {
-		Err();
+		Err(errorOpenFile);
 	}
 
 	fsize = FAT1_f_size(&fp);
 
 	/* move to the end of the file */
 	if (FAT1_lseek(&fp, fsize) != FR_OK || fp.fptr != fsize) {
-		Err();
+		Err(errorSeekFile);
 	}
 	/* get time */
 	if (TmDt1_GetTime(&time)!=ERR_OK) {
-		Err();
+		Err(errorGetTime);
 	}
 	/* write data */
 	write_buf[0] = '\0';
@@ -177,12 +184,16 @@ void writeToFile(int16_t number) {
 	UTIL1_strcat(write_buf, sizeof(write_buf), (unsigned char*)"\r\n");
 	if (FAT1_write(&fp, write_buf, UTIL1_strlen((char*)write_buf), &bw)!=FR_OK) {
 	(void)FAT1_close(&fp);
-		Err();
+		Err(errorCloseFile);
 	}
 	/* closing file */
 	(void)FAT1_close(&fp);
 }
 
-void Err(void) {
-  for(;;){}
+void Err(int reason) {
+	uint8_t buffer[30];
+	CLS1_SendStr((const unsigned char*)"SDCard parse file failed!\t", CLS1_GetStdio()->stdOut);
+	UTIL1_Num8sToStr(buffer, sizeof(buffer),reason);
+	CLS1_SendStr((const unsigned char*)buffer, CLS1_GetStdio()->stdOut);
+	for(;;){}
 }

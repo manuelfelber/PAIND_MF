@@ -76,8 +76,14 @@ static portTASK_FUNCTION(DotMatrixTask, pvParameters) {
 
 void LedInit(){
 	if (FRTOS1_xTaskCreate(DotMatrixTask, "DotMatrix", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
-	    for(;;){} /* error */
+	    for(;;){} //error
 	}
+	/*LedControl(1);
+	for (int x=0; x<numDevices; x++){
+		shutdown(x,false);       //The MAX72XX is in power-saving mode on startup
+		setIntensity(x,8);       // Set the brightness to default value
+		clearDisplay(x);         // and clear the display
+	}*/
 }
 
 uint8_t LedShowEye(int view){
@@ -100,12 +106,17 @@ uint8_t LedShowSix(void){
 
 uint8_t Led_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io)
 {
-  if (UTIL1_strcmp((char*)cmd, CLS1_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, "DOTMatrix help")==0) {
+  if (UTIL1_strcmp((char*)cmd, DOT_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, "DOTMatrix help")==0) {
     *handled = TRUE;
     return PrintHelp(io);
-  } else if ((UTIL1_strcmp((char*)cmd, CLS1_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "DOTMatrix eye")==0)) {
+  } else if (UTIL1_strcmp((char*)cmd, "DOTMatrix eye")==0) {
+    CS1_CriticalVariable();
     *handled = TRUE;
-    return LedShowEye(1);
+
+    CS1_EnterCritical();
+    uint8_t val = LedShowEye(1);
+    CS1_ExitCritical();
+    return val;
   } else if (UTIL1_strcmp((char*)cmd, "DOTMatrix six")==0) {
     *handled = TRUE;
     return LedShowSix();
