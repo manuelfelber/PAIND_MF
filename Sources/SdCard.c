@@ -53,16 +53,33 @@ void initSdCard(){
 					 if(UTIL1_xatoi(&p, &time)!=ERR_OK) {
 						 Err(errorAtoi); //error
 					 }
-					 if(pos > 255 && time < 0){ //check parameter range
+					 if(pos > 255 || time < 0){ //check parameter range
 						 Err(errorCheckRange);
 					 }
 					 Huft_L_SetPos(pos);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "ultrasonic", strlen("ultrasonic"))==0){
-					 //to test
+					 //check distance periodically
+					 uint32_t distance = 0;
+					 const unsigned char *p = read_buf + sizeof("ultrasonic ")-1;
+					 if(UTIL1_xatoi(&p, &distance)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(distance > 500 || distance < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 //call trigger and measure
 				 }
 				 else if(UTIL1_strncmp(read_buf, "wait", strlen("wait"))==0){
-					 //to test
+					 uint32_t time = 0;
+					 const unsigned char *p = read_buf + sizeof("wait ")-1;
+					 if(UTIL1_xatoi(&p, &time)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(time < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 FRTOS1_vTaskDelay(time/portTICK_RATE_MS);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "end", strlen("end"))==0){
 					 if(stackPointer > 0){
