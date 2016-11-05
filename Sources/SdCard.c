@@ -20,9 +20,6 @@ static struct Functions parcedFunction[numberOfFunctionsAllowed];
 void initSdCard(){
 	int number = 0, stackPointer = 0;
 	/* open file */
-	/*if (FAT1_open(&fp, "./prog2.txt", FA_READ) !=FR_OK) {
-		Err(errorOpenFile);
-	}*/
 	uint8_t status = FR_DISK_ERR;
 	while(status != FR_OK){
 		status = FAT1_open(&fp, "./prog2.txt", FA_READ);
@@ -106,7 +103,7 @@ void initSdCard(){
 				 }
 			}
 			/* closing file */
-			(void)FAT1_close(&fp);
+			FAT1_close(&fp);
 			return; //finish parsing
 		}
 		else{
@@ -119,11 +116,10 @@ void initSdCard(){
 }
 
 int readLineOffset(int pointer){
-	UINT bw;
-	int ptOfLine = fp.fptr;
-
+	UINT br = 0, status = FR_DISK_ERR;
+	int ptOfLine = fp.fptr, n = 0;
 	char symbol = 'a';
-	int n = 0;
+
 	for(int n=0; n<sizeof(read_buf); n++){
 		read_buf[n]=0;
 	}
@@ -131,7 +127,8 @@ int readLineOffset(int pointer){
 	FAT1_lseek(&fp, pointer);
 
 	while(symbol != '\n') {
-		if(FAT1_read(&fp, &symbol, sizeof(symbol), &bw)!=FR_OK){
+		status = FAT1_read(&fp, &symbol, sizeof(symbol), &br);
+		if(sizeof(symbol)>br || status !=FR_OK){
 			FAT1_close(&fp);
 			return 0;
 		}
@@ -144,17 +141,18 @@ int readLineOffset(int pointer){
 }
 
 int readLine(void){
-	UINT bw;
-	int ptOfLine = fp.fptr;
-
+	UINT br = 0;
+	int ptOfLine = fp.fptr, n = 0;
+	uint8_t status = FR_DISK_ERR;
 	char symbol = 'a';
-	int n = 0;
+
 	for(int n=0; n<sizeof(read_buf); n++){
 		read_buf[n]=0;
 	}
 
 	while(symbol != '\n') {
-		if(FAT1_read(&fp, &symbol, sizeof(symbol), &bw)!=FR_OK){
+		status = FAT1_read(&fp, &symbol, sizeof(symbol), &br);
+		if(sizeof(symbol)>br || status !=FR_OK){
 			FAT1_close(&fp);
 			return 0;
 		}
