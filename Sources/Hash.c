@@ -6,9 +6,10 @@
  */
 
 
+#include "PE_Types.h"
 
 //djb2 algorithmus http://www.cse.yorku.ca/~oz/hash.html
-unsigned long getHash(unsigned char *str){
+unsigned long getHash(uint8_t *str){
 	unsigned long hash = 5381;
 	int c;
 
