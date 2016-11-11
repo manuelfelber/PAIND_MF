@@ -8,6 +8,9 @@
 #include "Ultrasonic.h"
 #include "TU3.h"
 #include "WAIT1.h"
+#include "CLS1.h"
+
+#define DEBUG 0
 
 typedef enum {
   ECHO_IDLE, /* device not used */
@@ -88,7 +91,9 @@ void Measure(void) {
   cm = US_usToCentimeters(us, 22);
   UTIL1_Num16uToStrFormatted(buf, sizeof(buf), cm, ' ', 5);
 
-  //ROT_Put(cm<10); /* red LED if object closer than 10 cm */
+#ifdef DEBUG
+  CLS1_SendStr(buf, CLS1_GetStdio()->stdOut);
+#endif
 }
 
 void US_Init(void) {
