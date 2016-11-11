@@ -82,9 +82,12 @@
 #include "LEDpin3.h"
 #include "ANALOG_IN.h"
 #include "AdcLdd1.h"
-#include "Switch_B.h"
-#include "ExtIntLdd3.h"
 #include "PTD.h"
+#include "SwitchB.h"
+#include "keyPin1.h"
+#include "KeyISRpin1.h"
+#include "ExtIntLdd4.h"
+#include "TRG1.h"
 #include "TRIG.h"
 #include "TMOUT1.h"
 #include "SD1.h"
@@ -293,20 +296,6 @@ void SM1_OnBlockReceived(LDD_TUserData *UserDataPtr);
 /* ===================================================================*/
 void SM1_OnBlockSent(LDD_TUserData *UserDataPtr);
 
-void Switch_B_OnInterrupt(void);
-/*
-** ===================================================================
-**     Event       :  Switch_B_OnInterrupt (module Events)
-**
-**     Component   :  Switch_B [ExtInt]
-**     Description :
-**         This event is called when an active signal edge/level has
-**         occurred.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
 void Switch_A_OnInterrupt(void);
 /*
 ** ===================================================================
@@ -317,6 +306,38 @@ void Switch_A_OnInterrupt(void);
 **         This event is called when an active signal edge/level has
 **         occurred.
 **     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void SwitchB_OnKeyPressed(byte keys);
+/*
+** ===================================================================
+**     Event       :  SwitchB_OnKeyPressed (module Events)
+**
+**     Component   :  SwitchB [Key]
+**     Description :
+**         Event generated at the time a key has been pressed.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void SwitchB_OnKeyReleased(byte keys);
+/*
+** ===================================================================
+**     Event       :  SwitchB_OnKeyReleased (module Events)
+**
+**     Component   :  SwitchB [Key]
+**     Description :
+**         Event generated after a key has been released.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
 **     Returns     : Nothing
 ** ===================================================================
 */

@@ -29,6 +29,9 @@
 #include "Cpu.h"
 #include "Events.h"
 #include "Ultrasonic.h"
+#include "CLS1.h"
+
+#define DEBUG 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -281,24 +284,6 @@ void SM1_OnBlockSent(LDD_TUserData *UserDataPtr)
 
 /*
 ** ===================================================================
-**     Event       :  Switch_B_OnInterrupt (module Events)
-**
-**     Component   :  Switch_B [ExtInt]
-**     Description :
-**         This event is called when an active signal edge/level has
-**         occurred.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void Switch_B_OnInterrupt(void)
-{
-  /* Write your code here ... */
-	//TODO call method
-}
-
-/*
-** ===================================================================
 **     Event       :  Switch_A_OnInterrupt (module Events)
 **
 **     Component   :  Switch_A [ExtInt]
@@ -313,6 +298,47 @@ void Switch_A_OnInterrupt(void)
 {
   /* Write your code here ... */
 	//TODO call method
+}
+
+/*
+** ===================================================================
+**     Event       :  SwitchB_OnKeyPressed (module Events)
+**
+**     Component   :  SwitchB [Key]
+**     Description :
+**         Event generated at the time a key has been pressed.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
+**     Returns     : Nothing
+** ===================================================================
+*/
+void SwitchB_OnKeyPressed(byte keys)
+{
+	/* Write your code here. A bit in 'keys' indicates key pressed ... */
+	#if DEBUG
+	  CLS1_SendStr("INFO: SwitchB pressed!", CLS1_GetStdio()->stdOut);
+	#endif
+}
+
+/*
+** ===================================================================
+**     Event       :  SwitchB_OnKeyReleased (module Events)
+**
+**     Component   :  SwitchB [Key]
+**     Description :
+**         Event generated after a key has been released.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
+**     Returns     : Nothing
+** ===================================================================
+*/
+void SwitchB_OnKeyReleased(byte keys)
+{
+  /* Write your code here. A bit in 'keys' indicates key released ... */
 }
 
 /* END Events */

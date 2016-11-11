@@ -14,7 +14,6 @@
 
 #include "Buzzer.h"
 #include "Switch_A.h"
-#include "Switch_B.h"
 #include "ANALOG_IN.h"
 
 #include "GPIO.h"

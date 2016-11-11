@@ -10,6 +10,8 @@
 #include "Huft_L.h"
 #include "CLS1.h"
 
+#define DEBUG 1
+
 static FIL fp;
 static uint8_t read_buf[90];
 static int stack[3];
@@ -24,6 +26,10 @@ void initSdCard(){
 	while(status != FR_OK){
 		status = FAT1_open(&fp, "./prog2.txt", FA_READ);
 	}
+
+	#if DEBUG
+	  CLS1_SendStr("INFO: start parsing\n", CLS1_GetStdio()->stdOut);
+	#endif
 
 	while(1){
 		int tmp = readLine();
@@ -104,10 +110,16 @@ void initSdCard(){
 			}
 			/* closing file */
 			FAT1_close(&fp);
+			#if DEBUG
+			  CLS1_SendStr("INFO: successfully finished parsing\n", CLS1_GetStdio()->stdOut);
+			#endif
 			return; //finish parsing
 		}
 		else{
 			//unknown header!
+			#if DEBUG
+			  //CLS1_SendStr("INFO: unknown header!\n", CLS1_GetStdio()->stdOut);
+			#endif
 		}
 		for(int n=0; n<sizeof(read_buf); n++){
 			read_buf[n]=0;
@@ -207,7 +219,7 @@ void writeToFile(int16_t number) {
 
 void Err(int reason) {
 	uint8_t buffer[30];
-	CLS1_SendStr((const unsigned char*)"SDCard parse file failed!\t", CLS1_GetStdio()->stdOut);
+	CLS1_SendStr((const unsigned char*)"ERR: SDCard parse file failed!\n", CLS1_GetStdio()->stdOut);
 	UTIL1_Num8sToStr(buffer, sizeof(buffer),reason);
 	CLS1_SendStr((const unsigned char*)buffer, CLS1_GetStdio()->stdOut);
 	for(;;){}
