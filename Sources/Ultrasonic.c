@@ -91,7 +91,7 @@ void Measure(void) {
   cm = US_usToCentimeters(us, 22);
   UTIL1_Num16uToStrFormatted(buf, sizeof(buf), cm, ' ', 5);
 
-#ifdef DEBUG
+#if DEBUG
   CLS1_SendStr(buf, CLS1_GetStdio()->stdOut);
 #endif
 }
