@@ -16,8 +16,8 @@
 #include "Servo.h"
 #include "Huft_L.h"
 #include "Huft_R.h"
-#include "Bein_L.h"
-#include "Bein_R.h"
+#include "Fuss_L.h"
+#include "Fuss_R.h"
 #include "Knie_L.h"
 #include "Knie_R.h"
 
@@ -47,8 +47,8 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
   Huft_R_ParseCommand,
   Knie_L_ParseCommand,
   Huft_R_ParseCommand,
-  Bein_L_ParseCommand,
-  Bein_R_ParseCommand,
+  Fuss_L_ParseCommand,
+  Fuss_R_ParseCommand,
 #endif
 #if RTC1_PARSE_COMMAND_ENABLED
   RTC1_ParseCommand,

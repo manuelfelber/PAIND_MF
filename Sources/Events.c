@@ -37,6 +37,8 @@
 extern "C" {
 #endif 
 
+uint32_t cntr = 0;
+
 //extern unsigned int SEGGER_SYSVIEW_TickCnt;
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
@@ -339,6 +341,25 @@ void SwitchB_OnKeyPressed(byte keys)
 void SwitchB_OnKeyReleased(byte keys)
 {
   /* Write your code here. A bit in 'keys' indicates key released ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void TI1_OnInterrupt(void)
+{
+	cntr++; //1ms tick for Servo calcultaion
 }
 
 /* END Events */

@@ -6,28 +6,24 @@
  */
 
 
-#include "Huft_L.h"
-#include "Huft_R.h"
-#include "Knie_L.h"
-#include "Knie_R.h"
-#include "Knie_R.h"
-
-#include "WAIT1.h"
-
+#include "Robo.h"
 #include "Application.h"
 #include "FRTOS1.h"
 
 static void ServoTask(void *pvParameters){
 	for(;;){
-		FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
+		//FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+		walk(2,1200,FORWARD);
+		//FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+		turn(4,1200,FORWARD);
 	}
 }
 
 
 void Servo_Init(void){
-  /*if (FRTOS1_xTaskCreate(ServoTask, "Servo", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
+  if (FRTOS1_xTaskCreate(ServoTask, "Servo", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
     for(;;){} //error
-  }*/
+  }
 }
 
 

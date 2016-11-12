@@ -47,10 +47,10 @@
 #include "Pwm4.h"
 #include "PwmLdd4.h"
 #include "WAIT1.h"
-#include "Bein_L.h"
+#include "Fuss_L.h"
 #include "Pwm5.h"
 #include "PwmLdd5.h"
-#include "Bein_R.h"
+#include "Fuss_R.h"
 #include "Pwm6.h"
 #include "PwmLdd6.h"
 #include "FRTOS1.h"
@@ -88,7 +88,10 @@
 #include "KeyISRpin1.h"
 #include "ExtIntLdd4.h"
 #include "TRG1.h"
+#include "TI1.h"
+#include "TimerIntLdd1.h"
 #include "TRIG.h"
+#include "TU2.h"
 #include "TMOUT1.h"
 #include "SD1.h"
 #include "SS1.h"
@@ -101,6 +104,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif 
+
+extern uint32_t cntr;
 
 /*
 ** ===================================================================
@@ -341,6 +346,22 @@ void SwitchB_OnKeyReleased(byte keys);
 **     Returns     : Nothing
 ** ===================================================================
 */
+
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void TI1_OnInterrupt(void);
 
 /* END Events */
 
