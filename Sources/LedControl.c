@@ -34,7 +34,7 @@
 /*! Device data structure pointer used when auto initialization property is enabled. This constant can be passed as a first parameter to all component's methods. */
 #define SM1_DeviceData  ((LDD_TDeviceData *)PE_LDD_GetDeviceStructure(PE_LDD_COMPONENT_SM1_ID))
 
-const int numDevices = 1;      // number of MAX7219s used
+//const int numDevices = 2;      // number of MAX7219s used
 
 const static char eye[8][2] = {
 	{0b00000000, 0b00000000 },
@@ -57,19 +57,26 @@ const static char sechs[8] = {
 	0b01110000,
 	0b00000000};
 
+const static char mouth[8][2] = {
+	{0b00011000, 0b00011000 },
+	{0b00001100, 0b00110000},
+	{0b00000110, 0b01100000},
+	{0b00000110, 0b01100000},
+	{0b00000110, 0b01100000},
+	{0b00000110, 0b01100000},
+	{0b00001100, 0b00110000},
+	{0b00011000, 0b00011000}
+};
+
 
 static portTASK_FUNCTION(DotMatrixTask, pvParameters) {
-	LedControl(1);
-	for (int x=0; x<numDevices; x++){
-		shutdown(x,false);       //The MAX72XX is in power-saving mode on startup
-		setIntensity(x,8);       // Set the brightness to default value
-		clearDisplay(x);         // and clear the display
-	}
-	//FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
+	LedControl(2);
 	for(;;){
 		for(int i = 0; i < 2;i++) {
 			FRTOS1_vTaskDelay(2000/portTICK_RATE_MS);
-			LedShowEye(i);
+			LedShowEye(0,i);
+			FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
+			LedShowMouth(1,i);
 		}
 	}
 }
@@ -78,31 +85,35 @@ void LedInit(){
 	if (FRTOS1_xTaskCreate(DotMatrixTask, "DotMatrix", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	    for(;;){} //error
 	}
-	/*LedControl(1);
-	for (int x=0; x<numDevices; x++){
-		shutdown(x,false);       //The MAX72XX is in power-saving mode on startup
-		setIntensity(x,8);       // Set the brightness to default value
-		clearDisplay(x);         // and clear the display
-	}*/
 }
 
-uint8_t LedShowEye(int view){
+uint8_t LedShowEye(int addr, int view){
 	int digit = 0;
 	for(int i = 0; i <= 7; i++){
-		spiTransfer(0, digit+1,eye[i][view]);
+		spiTransfer(addr, digit+1,eye[i][view]);
 		digit++;
 	}
 	return ERR_OK;
 }
 
-uint8_t LedShowSix(void){
+uint8_t LedShowSix(int addr){
 	int digit = 0;
 	for(int i = 0; i <= 7; i++){
-		spiTransfer(0, digit+1,sechs[i]);
+		spiTransfer(addr, digit+1,sechs[i]);
 		digit++;
 	}
 	return ERR_OK;
 }
+
+uint8_t LedShowMouth(int addr, int view){
+	int digit = 0;
+	for(int i = 0; i <= 7; i++){
+		spiTransfer(addr, digit+1,mouth[i][view]);
+		digit++;
+	}
+	return ERR_OK;
+}
+
 
 uint8_t Led_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io)
 {
@@ -114,12 +125,12 @@ uint8_t Led_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_Std
     *handled = TRUE;
 
     CS1_EnterCritical();
-    uint8_t val = LedShowEye(1);
+    uint8_t val = LedShowEye(0,1);
     CS1_ExitCritical();
     return val;
   } else if (UTIL1_strcmp((char*)cmd, "DOTMatrix six")==0) {
     *handled = TRUE;
-    return LedShowSix();
+    return LedShowSix(0);
   }
   return ERR_OK;
 }
@@ -141,16 +152,16 @@ void LedControl(int numDevices) {
 	for(int i=0;i<64;i++){
 		status[i]=0x00;
 	}
-	for(int i=0;i<maxDevices;i++) {
-		spiTransfer(i,OP_DISPLAYTEST,0);
+	for (int x=0; x<numDevices; x++){
+		spiTransfer(x,OP_DISPLAYTEST,0);
+		shutdown(x,false);       //The MAX72XX is in power-saving mode on startup
 		//scanlimit is set to max on startup
-		setScanLimit(i,7);
+		setScanLimit(x,7);
 		//decode is done in source
-		spiTransfer(i,OP_DECODEMODE,0);
-		clearDisplay(i);
-		//we go into shutdown-mode on startup
-		shutdown(i,true);
-    }
+		spiTransfer(x,OP_DECODEMODE,0);
+		setIntensity(x,3);       // Set the brightness to default value
+		clearDisplay(x);         // and clear the display
+	}
 }
 
 int getDeviceCount() {

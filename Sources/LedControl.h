@@ -30,8 +30,9 @@ int maxDevices;
 
 
 void LedInit(void);
-uint8_t LedShowEye(int);
-uint8_t LedShowSix(void);
+uint8_t LedShowEye(int, int);
+uint8_t LedShowMouth(int, int);
+uint8_t LedShowSix(int);
 uint8_t Led_ParseCommand(const unsigned char *, bool *, const CLS1_StdIOType *);
 uint8_t PrintHelp(const CLS1_StdIOType *);
 
