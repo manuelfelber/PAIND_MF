@@ -35,28 +35,11 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 		//ultrasonic mesure distance
 		//Measure();
 
-		//test Servo
-		/*Huft_L_SetPos(0);
-		Huft_R_SetPos(0);
-		Knie_L_SetPos(0);
-		Knie_R_SetPos(0);
-		Bein_L_SetPos(0);
-		Bein_R_SetPos(0);
-		FRTOS1_vTaskDelay(1500/portTICK_RATE_MS);
-		Huft_L_SetPos(255);
-		Huft_R_SetPos(255);
-		Knie_L_SetPos(255);
-		Knie_R_SetPos(255);
-		Bein_L_SetPos(255);
-		Bein_R_SetPos(255);
-		FRTOS1_vTaskDelay(1500/portTICK_RATE_MS);*/
-
 		//mesure Battery Level
 		/*uint16_t value = 0;
 		ANALOG_IN_Measure(TRUE);
 		ANALOG_IN_GetValue16(&value);
 		float voltage = (float)value * 3.3 / 65536;*/
-
 
 		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
 	}
