@@ -23,6 +23,7 @@
 #include "Servo.h"
 #include "SdCard.h"
 #include "ANALOG_IN.h"
+#include "Buzzer.h"
 
 
 static portTASK_FUNCTION(mainApp, pvParameters) {
@@ -52,6 +53,7 @@ void APP_Run(void){
 	GPIO_Init();
 	Servo_Init();
 
+	Buzzer_ClrVal();
 	ROT_Off();
 	GRUN_Off();
 	BLAU_Off();

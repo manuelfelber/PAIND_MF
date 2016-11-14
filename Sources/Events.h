@@ -90,6 +90,8 @@
 #include "TRG1.h"
 #include "TI1.h"
 #include "TimerIntLdd1.h"
+#include "Power6V.h"
+#include "BitIoLdd5.h"
 #include "TRIG.h"
 #include "TU2.h"
 #include "TMOUT1.h"
