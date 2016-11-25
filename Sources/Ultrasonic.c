@@ -47,18 +47,19 @@ void US_EventEchoCapture(LDD_TUserData *UserDataPtr) {
   }
 }
 
+uint16_t US_usToCentimeters(uint16_t microseconds, uint8_t temperatureCelsius) {
+  return (microseconds*100UL)/calcAirspeed_dms(temperatureCelsius)/2; /* 2 because of two way */
+}
+
 static uint16_t calcAirspeed_dms(uint8_t temperatureCelsius) {
   /* Return the airspeed depending on the temperature, in deci-meter per second */
   unsigned int airspeed; /* decimeters per second */
 
   airspeed = 3313 + (6 * temperatureCelsius); /* dry air, 0% humidity, see http://en.wikipedia.org/wiki/Speed_of_sound */
-  airspeed -= (airspeed/100)*17; /* factor in a relative humidity of ~40% */ 
+  airspeed -= (airspeed/100)*15; /* factor in ~15% for a relative humidity of ~40% */
   return airspeed;
 }
 
-uint16_t US_usToCentimeters(uint16_t microseconds, uint8_t temperatureCelsius) {
-  return (microseconds*100UL)/calcAirspeed_dms(temperatureCelsius)/2; /* 2 because of two way */
-}
 
 /* measure and return the microseconds */
 uint16_t US_Measure_us(void) {
@@ -81,7 +82,7 @@ uint16_t US_Measure_us(void) {
   return us;
 }
 
-void Measure(void) {
+uint16_t Measure(void) {
   uint16_t us, cm;
   uint8_t buf[8];
 
@@ -94,6 +95,8 @@ void Measure(void) {
 #if DEBUG
   CLS1_SendStr(buf, CLS1_GetStdio()->stdOut);
 #endif
+
+  return cm;
 }
 
 void US_Init(void) {

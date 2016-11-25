@@ -13,9 +13,9 @@
 static void ServoTask(void *pvParameters){
 	for(;;){
 		//FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
-		walk(2,1200,FORWARD);
-		//FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
-		turn(4,1200,FORWARD);
+		walk(10,1200,FORWARD);
+		//FRTOS1_vTaskDelay(10/portTICK_RATE_MS);
+		//turn(4,1200,FORWARD);
 	}
 }
 

@@ -23,7 +23,7 @@ struct Functions{
 	unsigned long hash;
 };
 
-#define numberOfFunctionsAllowed 10
+#define numberOfFunctionsAllowed 100
 #define errorOpenFile 1
 #define errorSeekFile 2
 #define errorGetTime 3

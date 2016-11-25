@@ -29,10 +29,11 @@ void US_EventEchoCapture(LDD_TUserData *UserDataPtr);
  */
 uint16_t US_usToCentimeters(uint16_t microseconds, uint8_t temperatureCelsius);
 
+static uint16_t calcAirspeed_dms(uint8_t temperatureCelsius);
 
 uint16_t US_Measure_us(void);
 
-void Measure(void);
+uint16_t Measure(void);
 
 /*
  * \brief Driver initialization routine.

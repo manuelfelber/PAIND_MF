@@ -39,9 +39,9 @@ struct Servos{
 
 	//-- Reverse mode
 	bool _rev;
-}servo;
+};
 
-extern struct Servos _servo[4];
+extern struct Servos servo[4];
 
 void SetA( int , int );
 void SetO( int , int );

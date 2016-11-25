@@ -50,7 +50,6 @@ void APP_Run(void){
 	SHELL_Init();
 	LedInit();
 	US_Init();
-	GPIO_Init();
 	Servo_Init();
 
 	Buzzer_ClrVal();
