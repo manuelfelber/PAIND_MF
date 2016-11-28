@@ -9,6 +9,11 @@
 #include "Hash.h"
 #include "Huft_L.h"
 #include "CLS1.h"
+#include "Robo.h"
+#include "Huft_L.h"
+#include "Huft_R.h"
+#include "Fuss_L.h"
+#include "Fuss_R.h"
 
 #define DEBUG 1
 
@@ -24,7 +29,7 @@ void initSdCard(){
 	/* open file */
 	uint8_t status = FR_DISK_ERR;
 	while(status != FR_OK){
-		status = FAT1_open(&fp, "./prog2.txt", FA_READ);
+		status = FAT1_open(&fp, "./prog.txt", FA_READ);
 	}
 
 	#if DEBUG
@@ -61,6 +66,48 @@ void initSdCard(){
 					 }
 					 Huft_L_SetPos(pos);
 				 }
+				 if(UTIL1_strncmp(read_buf, "servo2", strlen("servo2"))==0){
+					 uint32_t pos = 0, time = 0;
+					 const unsigned char *p = read_buf + sizeof("servo2 ")-1;
+					 if(UTIL1_xatoi(&p, &pos)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(UTIL1_xatoi(&p, &time)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(pos > 255 || time < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 Huft_R_SetPos(pos);
+				 }
+				 if(UTIL1_strncmp(read_buf, "servo3", strlen("servo3"))==0){
+					 uint32_t pos = 0, time = 0;
+					 const unsigned char *p = read_buf + sizeof("servo3 ")-1;
+					 if(UTIL1_xatoi(&p, &pos)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(UTIL1_xatoi(&p, &time)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(pos > 255 || time < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 Fuss_L_SetPos(pos);
+				 }
+				 if(UTIL1_strncmp(read_buf, "servo4", strlen("servo4"))==0){
+					 uint32_t pos = 0, time = 0;
+					 const unsigned char *p = read_buf + sizeof("servo4 ")-1;
+					 if(UTIL1_xatoi(&p, &pos)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(UTIL1_xatoi(&p, &time)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(pos > 255 || time < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 Fuss_R_SetPos(pos);
+				 }
 				 else if(UTIL1_strncmp(read_buf, "ultrasonic", strlen("ultrasonic"))==0){
 					 //check distance periodically
 					 uint32_t distance = 0;
@@ -83,6 +130,57 @@ void initSdCard(){
 						 Err(errorCheckRange);
 					 }
 					 FRTOS1_vTaskDelay(time/portTICK_RATE_MS);
+				 }
+				 else if(UTIL1_strncmp(read_buf, "moonwalk", strlen("moonwalk"))==0){
+					 uint32_t steps = 0, direction = 0;
+					 const unsigned char *p = read_buf + sizeof("moonwalk ")-1;
+					 if(UTIL1_xatoi(&p, &steps)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(steps < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 if(UTIL1_xatoi(&p, &direction)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(direction != 1 && direction != -1){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 moonwalker(5, 1200, BIG,direction);
+				 }
+				 else if(UTIL1_strncmp(read_buf, "walk", strlen("walk"))==0){
+					 uint32_t steps = 0, direction = 0;
+					 const unsigned char *p = read_buf + sizeof("walk ")-1;
+					 if(UTIL1_xatoi(&p, &steps)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(steps < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 if(UTIL1_xatoi(&p, &direction)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(direction != 1 && direction != -1){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 walk(steps, 1200, direction);
+				 }
+				 else if(UTIL1_strncmp(read_buf, "turn", strlen("turn"))==0){
+					 uint32_t steps = 0, direction = 0;
+					 const unsigned char *p = read_buf + sizeof("turn ")-1;
+					 if(UTIL1_xatoi(&p, &steps)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(steps < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 if(UTIL1_xatoi(&p, &direction)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(direction != 1 && direction != -1){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 turn(steps, 1200, direction);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "end", strlen("end"))==0){
 					 if(stackPointer > 0){

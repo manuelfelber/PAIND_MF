@@ -30,7 +30,7 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 	(void)pvParameters; /* parameter not used */
 
 	//parse file
-	//initSdCard();
+	initSdCard();
 
 	for(;;) {
 		//ultrasonic mesure distance
