@@ -82,20 +82,20 @@ uint16_t US_Measure_us(void) {
   return us;
 }
 
-uint16_t Measure(void) {
+uint16_t USMeasure(void) {
   uint16_t us, cm;
   uint8_t buf[8];
 
-  us = US_Measure_us();
+  //us = US_Measure_us();
   UTIL1_Num16uToStrFormatted(buf, sizeof(buf), us, ' ', 5);
 
-  cm = US_usToCentimeters(us, 22);
+  //cm = US_usToCentimeters(us, 22);
   UTIL1_Num16uToStrFormatted(buf, sizeof(buf), cm, ' ', 5);
 
 #if DEBUG
   CLS1_SendStr(buf, CLS1_GetStdio()->stdOut);
 #endif
-
+  cm = 100;
   return cm;
 }
 

@@ -105,6 +105,7 @@ void FRTOS1_vApplicationTickHook(void)
 {
 	  TMOUT1_AddTick();
 	  TmDt1_AddTick();
+	  TRG1_AddTick();
 }
 
 /*

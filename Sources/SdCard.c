@@ -14,18 +14,22 @@
 #include "Huft_R.h"
 #include "Fuss_L.h"
 #include "Fuss_R.h"
+#include "TRG1.h"
+#include "Ultrasonic.h"
 
 #define DEBUG 1
 
 static FIL fp;
 static uint8_t read_buf[90];
+static uint32_t  distance;
 static int stack[3];
 static int stackPointer;
 static struct Functions parcedFunction[numberOfFunctionsAllowed];
 
 
-void initSdCard(){
+void SDCardParse(){
 	int number = 0, stackPointer = 0;
+	distance = 0;
 	/* open file */
 	uint8_t status = FR_DISK_ERR;
 	while(status != FR_OK){
@@ -110,7 +114,6 @@ void initSdCard(){
 				 }
 				 else if(UTIL1_strncmp(read_buf, "ultrasonic", strlen("ultrasonic"))==0){
 					 //check distance periodically
-					 uint32_t distance = 0;
 					 const unsigned char *p = read_buf + sizeof("ultrasonic ")-1;
 					 if(UTIL1_xatoi(&p, &distance)!=ERR_OK) {
 						 Err(errorAtoi); //error
@@ -118,7 +121,8 @@ void initSdCard(){
 					 if(distance > 500 || distance < 0){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 //call trigger and measure
+					 //now distance will be checked
+					 TRG1_AddTrigger(TRG1_DistanceMeasuring, 10, TrgCallback);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "wait", strlen("wait"))==0){
 					 uint32_t time = 0;
@@ -211,6 +215,8 @@ void initSdCard(){
 			#if DEBUG
 			  CLS1_SendStr("INFO: successfully finished parsing\n", CLS1_GetStdio()->stdOut);
 			#endif
+		    Huft_L_SetPWMDutyUs(0);
+		    Huft_R_SetPWMDutyUs(0);
 			return; //finish parsing
 		}
 		else{
@@ -223,6 +229,14 @@ void initSdCard(){
 			read_buf[n]=0;
 		}
 	}
+}
+
+static void TrgCallback(void){
+	uint16_t distanceMeasured = USMeasure();
+	if(distanceMeasured < distance){
+		turn(5, 1200, 1);
+	}
+	TRG1_AddTrigger(TRG1_DistanceMeasuring, 10, TrgCallback);
 }
 
 int readLineOffset(int pointer){

@@ -24,24 +24,21 @@
 #include "SdCard.h"
 #include "ANALOG_IN.h"
 #include "Buzzer.h"
+#include "accMonitoring.h"
 
 
 static portTASK_FUNCTION(mainApp, pvParameters) {
 	(void)pvParameters; /* parameter not used */
 
 	//parse file
-	initSdCard();
+	SDCardParse();
 
 	for(;;) {
-		//ultrasonic mesure distance
-		//Measure();
-
 		//mesure Battery Level
 		/*uint16_t value = 0;
 		ANALOG_IN_Measure(TRUE);
 		ANALOG_IN_GetValue16(&value);
 		float voltage = (float)value * 3.3 / 65536;*/
-
 		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
@@ -50,7 +47,8 @@ void APP_Run(void){
 	SHELL_Init();
 	LedInit();
 	US_Init();
-	Servo_Init();
+	initAccMonitoring();
+	//Servo_Init();
 
 	Buzzer_ClrVal();
 	ROT_Off();
@@ -60,7 +58,7 @@ void APP_Run(void){
 	if (FRTOS1_xTaskCreate(
 		mainApp,  /* pointer to the task */
 		"MainAPP", /* task name for kernel awareness debugging */
-		configMINIMAL_STACK_SIZE, /* task stack size */
+		configMINIMAL_STACK_SIZE+50, /* task stack size */
 		(void*)NULL, /* optional task startup argument */
 		tskIDLE_PRIORITY+1,  /* initial priority */
 		(xTaskHandle*)NULL /* optional task handle to create */

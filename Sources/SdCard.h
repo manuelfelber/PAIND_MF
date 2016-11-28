@@ -11,10 +11,11 @@
 #include "FAT1.h"
 #include "UTIL1.h"
 
-void initSdCard(void);
+void SDCardParse(void);
 void writeToFile(int16_t );
 int readLine(void);
 int readLineOffset(int);
+static void TrgCallback(void);
 
 void Err(int);
 

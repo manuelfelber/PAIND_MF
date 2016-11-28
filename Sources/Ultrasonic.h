@@ -33,12 +33,13 @@ static uint16_t calcAirspeed_dms(uint8_t temperatureCelsius);
 
 uint16_t US_Measure_us(void);
 
-uint16_t Measure(void);
+uint16_t USMeasure(void);
 
 /*
  * \brief Driver initialization routine.
  */
 void US_Init(void);
+static void USTrgCallback(void);
 
 
 #endif /* ULTRASONIC_H_ */

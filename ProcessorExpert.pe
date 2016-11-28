@@ -3,7 +3,7 @@
   <Header>
     <Name>PAIND</Name>
     <SavedBy>manuelwittmer</SavedBy>
-    <ModificationStamp>126</ModificationStamp>
+    <ModificationStamp>131</ModificationStamp>
     <Date>2016-09-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -54272,9 +54272,9 @@
         <UserReadOnly>false</UserReadOnly>
         <Value>(string list)</Value>
         <StrgList lines_count="3">
-          <Line>KEY1_PRESS /* key pressed, used by the KEY bean. Format is '&lt;triggerName&gt;_&lt;keyName&gt;_PRESS' */</Line>
-          <Line>EXAMPLE  /* example trigger */</Line>
           <Line>SwitchB_PRESS</Line>
+          <Line>SwitchA_PRESS</Line>
+          <Line>DistanceMeasuring</Line>
         </StrgList>
       </ItemState>
       <ItemState>
@@ -54311,7 +54311,7 @@
         <ItemSymbol>RTOS</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value />
+        <Value>FRTOS1</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>InitializeOnInit</ItemSymbol>
