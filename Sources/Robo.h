@@ -15,7 +15,7 @@
 #define RIGHT       -1
 #define SMALL       5
 #define MEDIUM      15
-#define BIG         30
+#define BIG         35
 
 
 
