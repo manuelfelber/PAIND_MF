@@ -30,6 +30,8 @@
 #include "Events.h"
 #include "Ultrasonic.h"
 #include "CLS1.h"
+#include "Buzzer.h"
+
 
 #define DEBUG 1
 
@@ -287,24 +289,6 @@ void SM1_OnBlockSent(LDD_TUserData *UserDataPtr)
 
 /*
 ** ===================================================================
-**     Event       :  Switch_A_OnInterrupt (module Events)
-**
-**     Component   :  Switch_A [ExtInt]
-**     Description :
-**         This event is called when an active signal edge/level has
-**         occurred.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void Switch_A_OnInterrupt(void)
-{
-  /* Write your code here ... */
-	//TODO call method
-}
-
-/*
-** ===================================================================
 **     Event       :  SwitchB_OnKeyPressed (module Events)
 **
 **     Component   :  SwitchB [Key]
@@ -319,9 +303,9 @@ void Switch_A_OnInterrupt(void)
 */
 void SwitchB_OnKeyPressed(byte keys)
 {
-	/* Write your code here. A bit in 'keys' indicates key pressed ... */
 	#if DEBUG
-	  CLS1_SendStr("INFO: SwitchB pressed!", CLS1_GetStdio()->stdOut);
+	  CLS1_SendStr("INFO: SwitchB pressed!\n", CLS1_GetStdio()->stdOut);
+	  AccMonClearAlarm();
 	#endif
 }
 
@@ -361,6 +345,65 @@ void SwitchB_OnKeyReleased(byte keys)
 void TI1_OnInterrupt(void)
 {
 	cntr++; //1ms tick for Servo calcultaion
+}
+
+/*
+** ===================================================================
+**     Event       :  SwitchA_OnKeyPressed (module Events)
+**
+**     Component   :  SwitchA [Key]
+**     Description :
+**         Event generated at the time a key has been pressed.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
+**     Returns     : Nothing
+** ===================================================================
+*/
+void SwitchA_OnKeyPressed(byte keys)
+{
+	#if DEBUG
+	  CLS1_SendStr("INFO: SwitchA pressed!\n", CLS1_GetStdio()->stdOut);
+	#endif
+}
+
+/*
+** ===================================================================
+**     Event       :  SwitchA_OnKeyReleased (module Events)
+**
+**     Component   :  SwitchA [Key]
+**     Description :
+**         Event generated after a key has been released.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
+**     Returns     : Nothing
+** ===================================================================
+*/
+void SwitchA_OnKeyReleased(byte keys)
+{
+  /* Write your code here. A bit in 'keys' indicates key released ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  ACCMON_EVNT_AppHandleEvent (module Events)
+**
+**     Component   :  ACCMON_EVNT [SimpleEvents]
+**     Description :
+**         
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         event           - Event (event number) to be processed.
+**     Returns     : Nothing
+** ===================================================================
+*/
+void ACCMON_EVNT_AppHandleEvent(uint8_t event)
+{
+  (void)event; /* only to avoid compiler warning about unused variable */
+  /* Write your code here ... */
 }
 
 /* END Events */

@@ -19,7 +19,6 @@
 #include "Shell.h"
 #include "Ultrasonic.h"
 #include "LedControl.h"
-#include "GPIO.h"
 #include "Servo.h"
 #include "SdCard.h"
 #include "ANALOG_IN.h"
@@ -38,8 +37,8 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 		/*uint16_t value = 0;
 		ANALOG_IN_Measure(TRUE);
 		ANALOG_IN_GetValue16(&value);
-		float voltage = (float)value * 3.3 / 65536;*/
-		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
+		float voltage = (float)value * 3.3 / 65536;
+		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);*/
 	}
 }
 

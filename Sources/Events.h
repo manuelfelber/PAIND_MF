@@ -69,8 +69,6 @@
 #include "CLS1.h"
 #include "Buzzer.h"
 #include "BitIoLdd1.h"
-#include "Switch_A.h"
-#include "ExtIntLdd2.h"
 #include "ROT.h"
 #include "LEDpin1.h"
 #include "BitIoLdd2.h"
@@ -95,6 +93,10 @@
 #include "MMA1.h"
 #include "GI2C1.h"
 #include "I2C2.h"
+#include "SwitchA.h"
+#include "keyPin2.h"
+#include "KeyISRpin2.h"
+#include "ExtIntLdd5.h"
 #include "TRIG.h"
 #include "TU2.h"
 #include "TMOUT1.h"
@@ -105,6 +107,7 @@
 #include "TU3.h"
 #include "FAT1.h"
 #include "TmDt1.h"
+#include "accMonitoring.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -306,20 +309,6 @@ void SM1_OnBlockReceived(LDD_TUserData *UserDataPtr);
 /* ===================================================================*/
 void SM1_OnBlockSent(LDD_TUserData *UserDataPtr);
 
-void Switch_A_OnInterrupt(void);
-/*
-** ===================================================================
-**     Event       :  Switch_A_OnInterrupt (module Events)
-**
-**     Component   :  Switch_A [ExtInt]
-**     Description :
-**         This event is called when an active signal edge/level has
-**         occurred.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
 void SwitchB_OnKeyPressed(byte keys);
 /*
 ** ===================================================================
@@ -367,6 +356,53 @@ void SwitchB_OnKeyReleased(byte keys);
 ** ===================================================================
 */
 void TI1_OnInterrupt(void);
+
+void SwitchA_OnKeyPressed(byte keys);
+/*
+** ===================================================================
+**     Event       :  SwitchA_OnKeyPressed (module Events)
+**
+**     Component   :  SwitchA [Key]
+**     Description :
+**         Event generated at the time a key has been pressed.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void SwitchA_OnKeyReleased(byte keys);
+/*
+** ===================================================================
+**     Event       :  SwitchA_OnKeyReleased (module Events)
+**
+**     Component   :  SwitchA [Key]
+**     Description :
+**         Event generated after a key has been released.
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         keys            - the key(s) pressed, as bitset (e.g. 1 is
+**                           key 1, 2 is key 2, 4 is key 3, ....)
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void ACCMON_EVNT_AppHandleEvent(uint8_t event);
+/*
+** ===================================================================
+**     Event       :  ACCMON_EVNT_AppHandleEvent (module Events)
+**
+**     Component   :  ACCMON_EVNT [SimpleEvents]
+**     Description :
+**         
+**     Parameters  :
+**         NAME            - DESCRIPTION
+**         event           - Event (event number) to be processed.
+**     Returns     : Nothing
+** ===================================================================
+*/
 
 /* END Events */
 
