@@ -12,7 +12,8 @@
 
 static FIL fp;
 static uint8_t read_buf[90];
-static uint32_t  distance;
+static uint32_t  distance, option;
+static uint16_t distanceMeasured;
 static int stack[3];
 static int stackPointer;
 static struct Functions parcedFunction[numberOfFunctionsAllowed];
@@ -110,6 +111,12 @@ void SDCardParse(){
 						 Err(errorAtoi); //error
 					 }
 					 if(distance > 500 || distance < 0){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 if(UTIL1_xatoi(&p, &option)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(option > 5 || option < 0){ //check parameter range
 						 Err(errorCheckRange);
 					 }
 					 //now distance will be checked
@@ -233,11 +240,27 @@ void SDCardParse(){
 }
 
 static void TrgCallback(void){
-	uint16_t distanceMeasured = US_Measure();
-	if(distanceMeasured < distance){
-		turn(5, 1200, 1);
+	__asm volatile("cpsie i"); /* enable interrupts */
+	distanceMeasured = US_Measure();
+	__asm volatile("cpsid i");  /* disable interrupts */
+	if(distanceMeasured < distance && distanceMeasured != 0){
+		switch(option){
+		case 0:
+			LedSetEmotions(EM_NEUTAL);
+		    (void)xSemaphoreGive(semLed);
+			break;
+		case 1:
+			break;
+		case 2:
+			turn(5, 1200, 1);
+			break;
+		}
 	}
-	TRG1_AddTrigger(TRG1_DistanceMeasuring, 10, TrgCallback);
+	else{
+		LedSetEmotions(EM_HAPPY);
+		(void)xSemaphoreGive(semLed);
+	}
+	TRG1_AddTrigger(TRG1_DistanceMeasuring, 50, TrgCallback);
 }
 
 int readLineOffset(int pointer){

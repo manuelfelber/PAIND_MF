@@ -142,6 +142,10 @@ static portTASK_FUNCTION(DotMatrixTask, pvParameters) {
 void LedSetEmotions(Emotion emotion){
 	LedEmotions = emotion;
 }
+Emotion LedGetEmotions(){
+	return LedEmotions;
+}
+
 
 void LedInit(){
 	LedEmotions = 0;

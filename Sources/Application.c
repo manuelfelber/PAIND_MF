@@ -5,25 +5,6 @@
  *      Author: Manuel Felber
  */
 #include "Application.h"				
-#include "Huft_L.h"
-#include "Huft_R.h"
-#include "Knie_L.h"
-#include "Knie_R.h"
-
-#include "WAIT1.h"
-#include "ROT.h"
-#include "GRUN.h"
-#include "BLAU.h"
-
-#include "FRTOS1.h"
-#include "Shell.h"
-#include "Ultrasonic.h"
-#include "LedControl.h"
-#include "SdCard.h"
-#include "Buzzer.h"
-#include "accMonitoring.h"
-#include "lowVoltage.h"
-#include "Power6V.h"
 
 xSemaphoreHandle semLed;
 
@@ -34,10 +15,10 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 	SDCardParse();
 
 	for(;;) {
-	    /*Huft_L_SetPWMDutyUs(0);
+	    Huft_L_SetPWMDutyUs(0);
 	    Huft_R_SetPWMDutyUs(0);
 		Fuss_R_SetPWMDutyUs(0);
-		Fuss_L_SetPWMDutyUs(0);*/
+		Fuss_L_SetPWMDutyUs(0);
 
 		//switch off 6V
 		//Power6V_ClrVal();
@@ -55,9 +36,9 @@ void APP_Run(void){
 	//Power6V_SetVal();
 	SHELL_Init();
 	LedInit();
-	//US_Init();
-	//initAccMonitoring();
-	//initLowVoltage();
+	US_Init();
+	initAccMonitoring();
+	initLowVoltage();
 
 	Buzzer_ClrVal();
 	ROT_Off();

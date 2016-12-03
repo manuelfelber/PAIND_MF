@@ -10,6 +10,24 @@
 #define ULTRASONIC_H_
 
 #include "PE_LDD.h"
+#include "TU3.h"
+#include "WAIT1.h"
+#include "CLS1.h"
+
+typedef enum {
+  ECHO_IDLE, /* device not used */
+  ECHO_TRIGGERED, /* started trigger pulse */
+  ECHO_MEASURE, /* measuring echo pulse */
+  ECHO_OVERFLOW, /* measurement took too long */
+  ECHO_FINISHED /* measurement finished */
+} US_EchoState;
+
+typedef struct {
+  LDD_TDeviceData *trigDevice; /* device handle for the Trigger pin */
+  LDD_TDeviceData *echoDevice; /* input capture device handle (echo pin) */
+  volatile US_EchoState state; /* state */
+  TU3_TValueType capture; /* input capture value */
+} US_DeviceType;
 
 /* 
  * \brief Called in case of an overflow during input capture. This function is called from an interrupt!
@@ -33,7 +51,7 @@ static uint16_t calcAirspeed_dms(uint8_t temperatureCelsius);
 
 uint16_t US_Measure_us(void);
 
-uint16_t USMeasure(void);
+uint16_t US_Measure(void);
 
 /*
  * \brief Driver initialization routine.

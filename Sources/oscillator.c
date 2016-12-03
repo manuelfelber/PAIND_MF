@@ -5,16 +5,9 @@
  *      Author: Manuel
  */
 
-#include "PE_Types.h"
-#include "TmDt1.h"
+
 #include "oscillator.h"
-#include "Events.h"
-#include "Huft_L.h"
-#include "Huft_R.h"
-#include "Fuss_L.h"
-#include "Fuss_R.h"
-#include <math.h>
-#include "FreeRTOS.h"
+
 
 struct Servos servo[4];
 

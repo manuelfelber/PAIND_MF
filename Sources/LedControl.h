@@ -79,6 +79,7 @@ uint8_t Led_ParseCommand(const unsigned char *, bool *, const CLS1_StdIOType *);
 uint8_t PrintHelp(const CLS1_StdIOType *);
 void LedShowEmotion(Emotion emotions);
 void LedSetEmotions(Emotion emotion);
+Emotion LedGetEmotions();
 
 /*
  * Create a new controler

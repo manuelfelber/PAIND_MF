@@ -6,34 +6,23 @@
  */
 
 #include "accMonitoring.h"
-#include "MMA1.h"
-#include "CLS1.h"
-#include "Buzzer.h"
 
-//static xTaskHandle AccMonTaskHandle;
-//static xSemaphoreHandle AccMonSem = NULL;
 
-typedef enum {
-  STATE_INIT,
-  STATE_UPRIGHT,
-  STATE_FALL,
-} AkkMonStateType;
 
-static volatile AkkMonStateType akkMonState = STATE_INIT; /* state machine state */
+static volatile AkkMonStateType akkMonState; /* state machine state */
 
 void initAccMonitoring(void){
+	akkMonState = STATE_INIT;
 	if (FRTOS1_xTaskCreate(AccMonitoringTask, "AccMonitoring", configMINIMAL_STACK_SIZE-60, NULL, tskIDLE_PRIORITY+2, NULL) != pdPASS) {
 		for(;;){} //error
 	}
 }
 
 void AccMonSetAlarm(){
-	//(void)xTaskNotify(AccMonTaskHandle, ACCMON_SET_ALARM, eSetBits);
 	akkMonState = STATE_FALL;
 }
 
 void AccMonClearAlarm(){
-	//(void)xTaskNotify(AccMonTaskHandle, ACCMON_CLEAR_ALARM, eSetBits);
 	akkMonState = STATE_UPRIGHT;
 }
 
@@ -56,27 +45,17 @@ uint16_t AccMonMeasure(){
 	UTIL1_Num16uToStrFormatted(buf, sizeof(buf), zVal, ' ', 5);
 	CLS1_SendStr(buf, CLS1_GetStdio()->stdOut);
 	CLS1_SendStr("\n", CLS1_GetStdio()->stdOut);*/
+	return zVal;
 }
 
 static void AccMonitoringTask(void *pvParameters){
-	//uint32_t notifcationValue;
-	//bool alarm = FALSE;
 	uint16_t zVal = 0xFFFF;
 	int res = ERR_FAILED;
 
 	for(;;){
-		switch(akkMonState)
-		{
+		switch(akkMonState){
 		case STATE_INIT:
-			/*//init binary Semaphore
-			FRTOS1_vSemaphoreCreateBinary(AccMonSem);
-			if (AccMonSem==NULL) {
-				for(;;){}
-			}
-			(void)FRTOS1_xSemaphoreTake(AccMonSem, 0);
-			FRTOS1_vQueueAddToRegistry(AccMonSem, "AccMonSem");*/
-
-			//init Acc Senor
+			//init Acc Sensor
 			res = MMA1_Init();
 			if(res != ERR_OK){
 				for(;;){}
@@ -87,7 +66,7 @@ static void AccMonitoringTask(void *pvParameters){
 		case STATE_UPRIGHT:
 			Buzzer_ClrVal();
 			zVal = AccMonMeasure();
-			if(zVal < 500){
+			if(zVal < 500 || zVal > 64000){
 				AccMonSetAlarm();
 			}
 			break;
@@ -99,5 +78,6 @@ static void AccMonitoringTask(void *pvParameters){
 			break;
 
 		}
+		FRTOS1_vTaskDelay(500/portTICK_RATE_MS);
 	}
 }

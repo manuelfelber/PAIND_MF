@@ -6,26 +6,8 @@
  *      Driver for the HC-SR04 and FRDM-KL25Z board
  */
 #include "Ultrasonic.h"
-#include "TU3.h"
-#include "WAIT1.h"
-#include "CLS1.h"
 
-#define DEBUG 0
-
-typedef enum {
-  ECHO_IDLE, /* device not used */
-  ECHO_TRIGGERED, /* started trigger pulse */
-  ECHO_MEASURE, /* measuring echo pulse */
-  ECHO_OVERFLOW, /* measurement took too long */
-  ECHO_FINISHED /* measurement finished */
-} US_EchoState;
-
-typedef struct {
-  LDD_TDeviceData *trigDevice; /* device handle for the Trigger pin */
-  LDD_TDeviceData *echoDevice; /* input capture device handle (echo pin) */
-  volatile US_EchoState state; /* state */
-  TU3_TValueType capture; /* input capture value */
-} US_DeviceType;
+#define DEBUG 1
 
 static US_DeviceType usDevice; /* device handle for the ultrasonic device */
 
@@ -69,6 +51,7 @@ uint16_t US_Measure_us(void) {
   /* send 10us pulse on TRIG line. */
   TRIG_SetVal(usDevice.trigDevice);
   WAIT1_Waitus(10);
+  //FRTOS1_vTaskDelay(0.1/portTICK_RATE_MS);
   usDevice.state = ECHO_TRIGGERED;
   TRIG_ClrVal(usDevice.trigDevice);
   while(usDevice.state!=ECHO_FINISHED) {
@@ -82,20 +65,19 @@ uint16_t US_Measure_us(void) {
   return us;
 }
 
-uint16_t USMeasure(void) {
+uint16_t US_Measure(void) {
   uint16_t us, cm;
   uint8_t buf[8];
 
-  //us = US_Measure_us();
+  us = US_Measure_us();
   UTIL1_Num16uToStrFormatted(buf, sizeof(buf), us, ' ', 5);
 
-  //cm = US_usToCentimeters(us, 22);
+  cm = US_usToCentimeters(us, 22);
   UTIL1_Num16uToStrFormatted(buf, sizeof(buf), cm, ' ', 5);
 
 #if DEBUG
   CLS1_SendStr(buf, CLS1_GetStdio()->stdOut);
 #endif
-  cm = 100;
   return cm;
 }
 

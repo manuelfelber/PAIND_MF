@@ -8,6 +8,16 @@
 #ifndef SOURCES_OSCILLATOR_H_
 #define SOURCES_OSCILLATOR_H_
 
+#include "Events.h"
+#include "Huft_L.h"
+#include "Huft_R.h"
+#include "Fuss_L.h"
+#include "Fuss_R.h"
+#include <math.h>
+#include "FreeRTOS.h"
+#include "PE_Types.h"
+#include "TmDt1.h"
+
 //-- Macro for converting from degrees to radians
 #define M_PI 3.14159
 
