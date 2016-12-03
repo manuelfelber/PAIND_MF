@@ -67,11 +67,13 @@ typedef enum {
   EM_HAPPY,
   EM_SAD,
   EM_NEUTAL,
+  EM_LOWBAT,
 } Emotion;
 
 
 void LedInit(void);
 uint8_t LedLowBat();
+void LedSetLowBat();
 uint8_t LedShowEye(int, int);
 uint8_t LedShowMouth(int, Emotion);
 uint8_t LedShowSix(int);

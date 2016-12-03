@@ -54,6 +54,7 @@
 /*! Device data structure pointer used when auto initialization property is enabled. This constant can be passed as a first parameter to all component's methods. */
 #define SM1_DeviceData  ((LDD_TDeviceData *)PE_LDD_GetDeviceStructure(PE_LDD_COMPONENT_SM1_ID))
 
+static bool LowBat;
 //const int numDevices = 2;      // number of MAX7219s used
 
 const static char eye[8][3] = {
@@ -149,12 +150,16 @@ Emotion LedGetEmotions(){
 
 void LedInit(){
 	LedEmotions = 0;
+	LowBat = FALSE;
 	if (FRTOS1_xTaskCreate(DotMatrixTask, "DotMatrix", configMINIMAL_STACK_SIZE-100, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	    for(;;){} //error
 	}
 }
 
 void LedShowEmotion(Emotion emotions){
+	if(LowBat){
+		emotions = EM_LOWBAT;
+	}
 	switch(emotions){
 	case EM_HAPPY:
 		LedShowEye(2,0);
@@ -170,6 +175,9 @@ void LedShowEmotion(Emotion emotions){
 		LedShowEye(2,0);
 		LedShowEye(3,0);
 		LedShowMouth(0,EM_NEUTAL);
+		break;
+	case EM_LOWBAT:
+		LedLowBat();
 		break;
 	}
 	FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
@@ -187,6 +195,12 @@ uint8_t LedLowBat(){ //show "lowBat" on mouth Dotmatrixes
 		digit++;
 	}
 	return ERR_OK;
+}
+
+void LedSetLowBat(){
+	LowBat = TRUE;
+	LedSetEmotions(EM_LOWBAT);
+	(void)xSemaphoreGive(semLed);
 }
 
 

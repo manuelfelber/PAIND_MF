@@ -17,7 +17,7 @@ static portTASK_FUNCTION(lowVoltage, pvParameters) {
 		float voltage = (float)value * (3.3/65536.0) * (1830.0/820.0)+1.5;
 		if(voltage < 7.8){
 			//show "low Voltage" on eyes
-			LedLowBat();
+			LedSetLowBat();
 		}
 
 		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
