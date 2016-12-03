@@ -13,7 +13,6 @@
 #include "GRUN.h"
 #include "ROT.h"
 #include "LedControl.h"
-#include "Servo.h"
 #include "Huft_L.h"
 #include "Huft_R.h"
 #include "Fuss_L.h"

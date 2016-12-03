@@ -19,12 +19,13 @@
 #include "Shell.h"
 #include "Ultrasonic.h"
 #include "LedControl.h"
-#include "Servo.h"
 #include "SdCard.h"
-#include "ANALOG_IN.h"
 #include "Buzzer.h"
 #include "accMonitoring.h"
+#include "lowVoltage.h"
+#include "Power6V.h"
 
+xSemaphoreHandle semLed;
 
 static portTASK_FUNCTION(mainApp, pvParameters) {
 	(void)pvParameters; /* parameter not used */
@@ -33,21 +34,30 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 	SDCardParse();
 
 	for(;;) {
-		//mesure Battery Level
-		/*uint16_t value = 0;
-		ANALOG_IN_Measure(TRUE);
-		ANALOG_IN_GetValue16(&value);
-		float voltage = (float)value * 3.3 / 65536;
-		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);*/
+	    /*Huft_L_SetPWMDutyUs(0);
+	    Huft_R_SetPWMDutyUs(0);
+		Fuss_R_SetPWMDutyUs(0);
+		Fuss_L_SetPWMDutyUs(0);*/
+
+		//switch off 6V
+		//Power6V_ClrVal();
+		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
 
 void APP_Run(void){
+	semLed = xSemaphoreCreateBinary();
+	if (semLed==NULL) { /* semaphore creation failed */
+		for(;;){} /* error */
+	}
+	vQueueAddToRegistry(semLed, "Semaphore DotMatrix");
+
+	//Power6V_SetVal();
 	SHELL_Init();
 	LedInit();
-	US_Init();
-	initAccMonitoring();
-	//Servo_Init();
+	//US_Init();
+	//initAccMonitoring();
+	//initLowVoltage();
 
 	Buzzer_ClrVal();
 	ROT_Off();

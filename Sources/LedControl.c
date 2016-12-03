@@ -33,13 +33,7 @@
  
 
 #include "LedControl.h"
-#include "PE_Types.h"
-#include "PE_Error.h"
-#include "PE_Const.h"
-#include "stdbool.h"
-#include "SM1.h"
-#include "SPI_CS.h"
-#include "FRTOS1.h"
+
 
 //the opcodes for the MAX7221 and MAX7219
 #define OP_NOOP   0
@@ -62,15 +56,15 @@
 
 //const int numDevices = 2;      // number of MAX7219s used
 
-const static char eye[8][2] = {
-	{0b00000000, 0b00000000 },
-	{0b00011000, 0b00011000},
-	{0b00111100, 0b00111100},
-	{0b01100110, 0b01001110},
-	{0b01100110, 0b01001110},
-	{0b00111100, 0b00111100},
-	{0b00011000, 0b00011000},
-	{0b00000000, 0b00000000}
+const static char eye[8][3] = {
+	{0b00011000, 0b00011000, 0b00000000 },
+	{0b00111100, 0b00111100, 0b00000000},
+	{0b01100110, 0b01111110, 0b00000000},
+	{0b11000011, 0b11011011, 0b00000000},
+	{0b11000011, 0b11000011, 0b00000000},
+	{0b01100110, 0b01100110, 0b00000000},
+	{0b00111100, 0b00111100, 0b00000000},
+	{0b00011000, 0b00011000, 0b00000000}
 };
 
 const static char sechs[8] = {
@@ -83,35 +77,114 @@ const static char sechs[8] = {
 	0b01110000,
 	0b00000000};
 
-const static char mouth[8][2] = {
-	{0b00011000, 0b00011000 },
-	{0b00001100, 0b00110000},
-	{0b00000110, 0b01100000},
-	{0b00000110, 0b01100000},
-	{0b00000110, 0b01100000},
-	{0b00000110, 0b01100000},
-	{0b00001100, 0b00110000},
-	{0b00011000, 0b00011000}
+const static char mouthHappy[8][2] = {
+	{0b00000111, 0b11000000},
+	{0b00011110, 0b11000000},
+	{0b00111100, 0b11100000},
+	{0b01111000, 0b01110000},
+	{0b01110000, 0b01111000},
+	{0b11100000, 0b00111100},
+	{0b11000000, 0b00011110},
+	{0b11000000, 0b00000111}
 };
 
+const static char mouthSad[8][2] = {
+	{0b11000000, 0b00000110},
+	{0b11100000, 0b00000110},
+	{0b01110000, 0b00001110},
+	{0b00111000, 0b00011100},
+	{0b00011100, 0b00111000},
+	{0b00001110, 0b01110000},
+	{0b00000110, 0b11100000},
+	{0b00000110, 0b11000000}
+};
+
+const static char mouthNeutral[8][2] = {
+	{0b01110000, 0b01110000},
+	{0b01110000, 0b01110000},
+	{0b01110000, 0b01110000},
+	{0b01110000, 0b01110000},
+	{0b01110000, 0b01110000},
+	{0b01110000, 0b01110000},
+	{0b01110000, 0b01110000},
+	{0b01110000, 0b01110000}
+};
+
+const static char lowBat[8][2] = {
+	{0b00000000, 0b01000110},
+	{0b00000000, 0b01000010},
+	{0b01111110, 0b01000011},
+	{0b11000010, 0b01000010},
+	{0b01000010, 0b01111110},
+	{0b01100010, 0b00111100},
+	{0b01010010, 0b00000000},
+	{0b01001010, 0b00000000}
+};
+static Emotion LedEmotions;
 
 static portTASK_FUNCTION(DotMatrixTask, pvParameters) {
-	LedControl(2);
+	LedControl(4);
+	//LedShowEye(3,0);
+	//LedShowMouth(0,EM_HAPPY);*/
+
+
 	for(;;){
-		for(int i = 0; i < 2;i++) {
+
+		xSemaphoreTake(semLed,portMAX_DELAY);
+		LedShowEmotion(LedEmotions);
+		/*for(int i = 0; i < 3;i+=2) {
 			FRTOS1_vTaskDelay(2000/portTICK_RATE_MS);
-			LedShowEye(0,i);
-			FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
-			LedShowMouth(1,i);
-		}
+			LedShowEye(2,i);
+		}*/
 	}
 }
 
+void LedSetEmotions(Emotion emotion){
+	LedEmotions = emotion;
+}
+
 void LedInit(){
+	LedEmotions = 0;
 	if (FRTOS1_xTaskCreate(DotMatrixTask, "DotMatrix", configMINIMAL_STACK_SIZE-100, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	    for(;;){} //error
 	}
 }
+
+void LedShowEmotion(Emotion emotions){
+	switch(emotions){
+	case EM_HAPPY:
+		LedShowEye(2,0);
+		LedShowEye(3,0);
+		LedShowMouth(0,EM_HAPPY);
+		break;
+	case EM_SAD:
+		LedShowEye(2,0);
+		LedShowEye(3,0);
+		LedShowMouth(0,EM_SAD);
+		break;
+	case EM_NEUTAL:
+		LedShowEye(2,0);
+		LedShowEye(3,0);
+		LedShowMouth(0,EM_NEUTAL);
+		break;
+	}
+	FRTOS1_vTaskDelay(50/portTICK_RATE_MS);
+}
+
+uint8_t LedLowBat(){ //show "lowBat" on mouth Dotmatrixes
+	int digit = 0;
+	for(int i = 0; i <= 7; i++){
+		spiTransfer(0, digit+1,lowBat[i][0]);
+		digit++;
+	}
+	digit = 0;
+	for(int i = 0; i <= 7; i++){
+		spiTransfer(1, digit+1,lowBat[i][1]);
+		digit++;
+	}
+	return ERR_OK;
+}
+
 
 uint8_t LedShowEye(int addr, int view){
 	int digit = 0;
@@ -131,10 +204,35 @@ uint8_t LedShowSix(int addr){
 	return ERR_OK;
 }
 
-uint8_t LedShowMouth(int addr, int view){
+uint8_t LedShowMouth(int addr, Emotion emotion){
 	int digit = 0;
 	for(int i = 0; i <= 7; i++){
-		spiTransfer(addr, digit+1,mouth[i][view]);
+		switch(emotion){
+		case EM_HAPPY:
+			spiTransfer(addr, digit+1,mouthHappy[i][0]);
+			break;
+		case EM_SAD:
+			spiTransfer(addr, digit+1,mouthSad[i][0]);
+			break;
+		case EM_NEUTAL:
+			spiTransfer(addr, digit+1,mouthNeutral[i][0]);
+			break;
+		}
+		digit++;
+	}
+	digit = 0;
+	for(int i = 0; i <= 7; i++){
+		switch(emotion){
+		case EM_HAPPY:
+			spiTransfer(addr+1, digit+1,mouthHappy[i][1]);
+			break;
+		case EM_SAD:
+			spiTransfer(addr+1, digit+1,mouthSad[i][1]);
+			break;
+		case EM_NEUTAL:
+			spiTransfer(addr+1, digit+1,mouthNeutral[i][1]);
+			break;
+		}
 		digit++;
 	}
 	return ERR_OK;
@@ -276,6 +374,8 @@ void setColumn(int addr, int col, char value) {
 }
 
 void spiTransfer(int addr, volatile char opcode, volatile char data) {
+	//CS1_CriticalVariable();
+	//CS1_EnterCritical();
     //Create an array with the data to shift out
     int offset=addr*2;
     int maxbytes=maxDevices*2;
@@ -294,6 +394,7 @@ void spiTransfer(int addr, volatile char opcode, volatile char data) {
     }
     //latch the data onto the display
     SPI_CS_SetVal();
+    //CS1_ExitCritical();
 }    
 
 

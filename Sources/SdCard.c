@@ -6,16 +6,7 @@
  */
 
 #include "SdCard.h"
-#include "Hash.h"
-#include "Huft_L.h"
-#include "CLS1.h"
-#include "Robo.h"
-#include "Huft_L.h"
-#include "Huft_R.h"
-#include "Fuss_L.h"
-#include "Fuss_R.h"
-#include "TRG1.h"
-#include "Ultrasonic.h"
+
 
 #define DEBUG 1
 
@@ -167,7 +158,7 @@ void SDCardParse(){
 					 if(direction != 1 && direction != -1){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 walk(steps, 1200, direction);
+					 walk(steps, 800, direction);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "turn", strlen("turn"))==0){
 					 uint32_t steps = 0, direction = 0;
@@ -184,7 +175,19 @@ void SDCardParse(){
 					 if(direction != 1 && direction != -1){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 turn(steps, 1200, direction);
+					 turn(steps, 800, direction);
+				 }
+				 else if(UTIL1_strncmp(read_buf, "emotion", strlen("emotion"))==0){
+					 uint32_t emotions = 0;
+					 const unsigned char *p = read_buf + sizeof("emotion ")-1;
+					 if(UTIL1_xatoi(&p, &emotions)!=ERR_OK) {
+						 Err(errorAtoi); //error
+					 }
+					 if(emotions < 0 && emotions > 3){ //check parameter range
+						 Err(errorCheckRange);
+					 }
+					 LedSetEmotions(emotions);
+					 (void)xSemaphoreGive(semLed);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "end", strlen("end"))==0){
 					 if(stackPointer > 0){
@@ -215,8 +218,6 @@ void SDCardParse(){
 			#if DEBUG
 			  CLS1_SendStr("INFO: successfully finished parsing\n", CLS1_GetStdio()->stdOut);
 			#endif
-		    Huft_L_SetPWMDutyUs(0);
-		    Huft_R_SetPWMDutyUs(0);
 			return; //finish parsing
 		}
 		else{
@@ -232,7 +233,7 @@ void SDCardParse(){
 }
 
 static void TrgCallback(void){
-	uint16_t distanceMeasured = USMeasure();
+	uint16_t distanceMeasured = US_Measure();
 	if(distanceMeasured < distance){
 		turn(5, 1200, 1);
 	}

@@ -8,6 +8,7 @@
 #ifndef SOURCES_HASH_H_
 #define SOURCES_HASH_H_
 
+#include "PE_Types.h"
 
 unsigned long getHash(uint8_t *);
 

@@ -36,6 +36,15 @@
 #include "stdbool.h"
 #include "PE_Types.h"
 #include "CLS1.h"
+#include "PE_Types.h"
+#include "PE_Error.h"
+#include "PE_Const.h"
+#include "stdbool.h"
+#include "SM1.h"
+#include "SPI_CS.h"
+#include "FRTOS1.h"
+#include "CS1.h"
+#include "Application.h"
 
 #define DOTMATRIX_PARSE_COMMAND_ENABLED         1
 /* predefined commands */
@@ -54,12 +63,22 @@ char status[64];
 int maxDevices;
 
 
+typedef enum {
+  EM_HAPPY,
+  EM_SAD,
+  EM_NEUTAL,
+} Emotion;
+
+
 void LedInit(void);
+uint8_t LedLowBat();
 uint8_t LedShowEye(int, int);
-uint8_t LedShowMouth(int, int);
+uint8_t LedShowMouth(int, Emotion);
 uint8_t LedShowSix(int);
 uint8_t Led_ParseCommand(const unsigned char *, bool *, const CLS1_StdIOType *);
 uint8_t PrintHelp(const CLS1_StdIOType *);
+void LedShowEmotion(Emotion emotions);
+void LedSetEmotions(Emotion emotion);
 
 /*
  * Create a new controler

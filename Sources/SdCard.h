@@ -10,6 +10,18 @@
 
 #include "FAT1.h"
 #include "UTIL1.h"
+#include "Hash.h"
+#include "Huft_L.h"
+#include "CLS1.h"
+#include "Robo.h"
+#include "Huft_L.h"
+#include "Huft_R.h"
+#include "Fuss_L.h"
+#include "Fuss_R.h"
+#include "TRG1.h"
+#include "Ultrasonic.h"
+#include "LedControl.h"
+#include "Application.h"
 
 void SDCardParse(void);
 void writeToFile(int16_t );

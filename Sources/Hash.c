@@ -5,8 +5,7 @@
  *      Author: Manuel Felber
  */
 
-
-#include "PE_Types.h"
+#include "Hash.h"
 
 //djb2 algorithmus http://www.cse.yorku.ca/~oz/hash.html
 unsigned long getHash(uint8_t *str){
