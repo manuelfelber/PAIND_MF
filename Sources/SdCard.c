@@ -165,7 +165,7 @@ void SDCardParse(){
 					 if(direction != 1 && direction != -1){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 walk(steps, 800, direction);
+					 walk(steps, 1800, direction);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "turn", strlen("turn"))==0){
 					 uint32_t steps = 0, direction = 0;
@@ -182,7 +182,7 @@ void SDCardParse(){
 					 if(direction != 1 && direction != -1){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 turn(steps, 800, direction);
+					 turn(steps, 1800, direction);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "emotion", strlen("emotion"))==0){
 					 uint32_t emotions = 0;

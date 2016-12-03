@@ -5,17 +5,8 @@
  *      Author: Manuel
  */
 
-#include "PE_Types.h"
-#include "WAIT1.h"
 #include "Robo.h"
-#include "Huft_L.h"
-#include "Huft_R.h"
-#include "Fuss_L.h"
-#include "Fuss_R.h"
-#include "oscillator.h"
-#include "TmDt1.h"
-#include "Events.h"
-#include "math.h"
+
 
 void initRobo(void){
 	Robo_initPos();
@@ -112,7 +103,7 @@ void walk(float steps, int T, int dir){
   //--       90 : Walk backward
   //-- Feet servos also have the same offset (for tiptoe a little bit)
 		   //HR, HL, FR, FL
-  int A[4]= {30, 30, 35, 35}; //{30, 30, 20, 20};
+  int A[4]= {30, 30, 30, 30}; //{30, 30, 20, 20};
   int O[4] = {0, 0, 4, -4};
   double phase_diff[4] = {0, 0, DEG2RAD(dir * -90), DEG2RAD(dir * -90)};
 
@@ -134,7 +125,7 @@ void turn(float steps, int T, int dir){
   //-- When the right hip servo amplitude is higher, the steps taken by
   //--   the right leg are bigger than the left. So, the robot describes an
   //--   left arc
-  int A[4]= {30, 30, 35, 35};
+  int A[4]= {30, 30, 30, 30};
   int O[4] = {0, 0, 4, -4};
   double phase_diff[4] = {0, 0, DEG2RAD(-90), DEG2RAD(-90)};
 
@@ -397,7 +388,7 @@ void execute(int A[4], int O[4], int T, double phase_diff[4], float steps){
 	for(int i = 0; i < 4; i++){
 		attach(false, i);
 	}
-
+	steps += 0.8;
 	int cycles=(int)steps;
 
 	//-- Execute complete cycles

@@ -8,6 +8,17 @@
 #ifndef SOURCES_ROBO_H_
 #define SOURCES_ROBO_H_
 
+#include "Huft_L.h"
+#include "Huft_R.h"
+#include "Fuss_L.h"
+#include "Fuss_R.h"
+#include "oscillator.h"
+#include "TmDt1.h"
+#include "Events.h"
+#include "math.h"
+#include "PE_Types.h"
+#include "WAIT1.h"
+
 //-- Constants
 #define FORWARD     1
 #define BACKWARD    -1
