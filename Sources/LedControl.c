@@ -277,7 +277,7 @@ uint8_t Led_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_Std
   return ERR_OK;
 }
 
-uint8_t PrintHelp(const CLS1_StdIOType *io) {
+static uint8_t PrintHelp(const CLS1_StdIOType *io) {
   CLS1_SendHelpStr((unsigned char*)"DOTMatrix", (unsigned char*)"Commands to test Dotmatrix functions\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  eye", (unsigned char*)"Show Robot eye\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  six", (unsigned char*)"show number six\r\n", io->stdOut);
