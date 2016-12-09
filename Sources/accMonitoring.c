@@ -27,10 +27,10 @@ void AccMonClearAlarm(){
 }
 
 uint16_t AccMonMeasure(){
-	uint16_t xVal = 0;
-	uint16_t yVal = 0;
-	uint16_t zVal = 0;
-	uint8_t buf[6];
+	int16_t xVal = 0;
+	int16_t yVal = 0;
+	int16_t zVal = 0;
+	//uint8_t buf[6];
 	xVal =  MMA1_GetX();
 	yVal =  MMA1_GetY();
 	zVal =  MMA1_GetZ();
@@ -49,7 +49,7 @@ uint16_t AccMonMeasure(){
 }
 
 static void AccMonitoringTask(void *pvParameters){
-	uint16_t zVal = 0xFFFF;
+	int16_t zVal = 4000;
 	int res = ERR_FAILED;
 
 	for(;;){
@@ -66,7 +66,7 @@ static void AccMonitoringTask(void *pvParameters){
 		case STATE_UPRIGHT:
 			Buzzer_ClrVal();
 			zVal = AccMonMeasure();
-			if(zVal < 500 || zVal > 64000){
+			if(zVal < 2000){
 				AccMonSetAlarm();
 			}
 			break;
@@ -78,6 +78,6 @@ static void AccMonitoringTask(void *pvParameters){
 			break;
 
 		}
-		FRTOS1_vTaskDelay(500/portTICK_RATE_MS);
+		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
