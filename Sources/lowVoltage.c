@@ -15,7 +15,7 @@ static portTASK_FUNCTION(lowVoltage, pvParameters) {
 		ANALOG_IN_Measure(TRUE);
 		ANALOG_IN_GetValue16(&value);
 		float voltage = (float)value * (3.3/65536.0) * (1830.0/820.0)+1.5;
-		if(voltage < 7.8){
+		if(voltage < 7.7){
 			//show "low Voltage" on eyes
 			LedSetLowBat();
 		}
