@@ -363,6 +363,12 @@ void TI1_OnInterrupt(void)
 */
 void SwitchA_OnKeyPressed(byte keys)
 {
+	if(getMode()== MODE_SDCARD){
+		changeMode(MODE_DEMO);
+	}
+	else{
+		changeMode(MODE_SDCARD);
+	}
 	#if DEBUG
 	  CLS1_SendStr("INFO: SwitchA pressed!\n", CLS1_GetStdio()->stdOut);
 	#endif

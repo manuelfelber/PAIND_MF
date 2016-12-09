@@ -388,7 +388,7 @@ void execute(int A[4], int O[4], int T, double phase_diff[4], float steps){
 	for(int i = 0; i < 4; i++){
 		attach(false, i);
 	}
-	steps += 0.8;
+	steps += 0.8; //TEST
 	int cycles=(int)steps;
 
 	//-- Execute complete cycles
@@ -464,7 +464,7 @@ void oscillateServos(int A[4], int O[4], int T, double phase_diff[4], float cycl
 	double ref=cntr;
 	for (double x=ref; x<=T*cycle+ref; x=cntr){
 		for (int i=0; i<4; i++){
-		refresh(i);
+			refresh(i);
 		}
 	}
 }

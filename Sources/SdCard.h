@@ -23,18 +23,15 @@
 #include "LedControl.h"
 #include "Application.h"
 
-void SDCardParse(void);
-void writeToFile(int16_t );
-int readLine(void);
-int readLineOffset(int);
-static void TrgCallback(void);
-
-void Err(int);
-
 struct Functions{
 	int pointer;
 	unsigned long hash;
 };
+
+typedef enum {
+  MODE_SDCARD, /* parse textfile */
+  MODE_DEMO, /* run DEMO program */
+} RunMode;
 
 #define numberOfFunctionsAllowed 100
 #define errorOpenFile 1
@@ -44,6 +41,15 @@ struct Functions{
 #define errorCheckRange 5
 #define errorAtoi 6
 
-
+void SDCardParse(void);
+void writeToFile(int16_t );
+int readLine(void);
+int readLineOffset(int);
+static void TrgCallback(void);
+void changeMode(RunMode);
+RunMode getMode(void);
+void setDistance(uint32_t);
+void setTrigger(void);
+void Err(int);
 
 #endif /* SOURCES_SDCARD_H_ */

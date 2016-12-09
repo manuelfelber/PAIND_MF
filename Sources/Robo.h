@@ -18,6 +18,7 @@
 #include "math.h"
 #include "PE_Types.h"
 #include "WAIT1.h"
+#include "SdCard.h"
 
 //-- Constants
 #define FORWARD     1
@@ -27,6 +28,7 @@
 #define SMALL       5
 #define MEDIUM      15
 #define BIG         35
+#define PERIODE		1800
 
 
 

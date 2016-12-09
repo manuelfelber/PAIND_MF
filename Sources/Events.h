@@ -108,6 +108,7 @@
 #include "FAT1.h"
 #include "TmDt1.h"
 #include "accMonitoring.h"
+#include "SdCard.h"
 
 #ifdef __cplusplus
 extern "C" {

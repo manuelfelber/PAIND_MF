@@ -11,8 +11,22 @@ xSemaphoreHandle semLed;
 static portTASK_FUNCTION(mainApp, pvParameters) {
 	(void)pvParameters; /* parameter not used */
 
+	//wait for users mode decicion
+	FRTOS1_vTaskDelay(3000/portTICK_RATE_MS);
+
 	//parse file
-	SDCardParse();
+	if(getMode() == MODE_SDCARD){
+		SDCardParse();
+	}
+
+	if(getMode() == MODE_DEMO){
+		//setDistance(40);
+		//setTrigger();
+		while(1){
+			walk(3,PERIODE, 1);
+			turn(4, PERIODE, 1);
+		}
+	}
 
 	for(;;) {
 	    Huft_L_SetPWMDutyUs(0);
@@ -21,7 +35,7 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 		Fuss_L_SetPWMDutyUs(0);
 
 		//switch off 6V
-		//Power6V_ClrVal();
+		Power6V_ClrVal();
 		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
@@ -32,11 +46,12 @@ void APP_Run(void){
 		for(;;){} /* error */
 	}
 	vQueueAddToRegistry(semLed, "Semaphore DotMatrix");
+	changeMode(MODE_SDCARD);
 
-	//Power6V_SetVal();
+	Power6V_SetVal();
 	SHELL_Init();
 	LedInit();
-	US_Init();
+	//US_Init();
 	initAccMonitoring();
 	initLowVoltage();
 

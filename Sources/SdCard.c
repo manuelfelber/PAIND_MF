@@ -17,6 +17,7 @@ static uint16_t distanceMeasured;
 static int stack[3];
 static int stackPointer;
 static struct Functions parcedFunction[numberOfFunctionsAllowed];
+static RunMode mode;
 
 
 void SDCardParse(){
@@ -120,7 +121,7 @@ void SDCardParse(){
 						 Err(errorCheckRange);
 					 }
 					 //now distance will be checked
-					 TRG1_AddTrigger(TRG1_DistanceMeasuring, 10, TrgCallback);
+					 setTrigger();
 				 }
 				 else if(UTIL1_strncmp(read_buf, "wait", strlen("wait"))==0){
 					 uint32_t time = 0;
@@ -148,7 +149,7 @@ void SDCardParse(){
 					 if(direction != 1 && direction != -1){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 moonwalker(5, 1200, BIG,direction);
+					 moonwalker(5, PERIODE, BIG,direction);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "walk", strlen("walk"))==0){
 					 uint32_t steps = 0, direction = 0;
@@ -165,7 +166,7 @@ void SDCardParse(){
 					 if(direction != 1 && direction != -1){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 walk(steps, 1800, direction);
+					 walk(steps, PERIODE, direction);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "turn", strlen("turn"))==0){
 					 uint32_t steps = 0, direction = 0;
@@ -182,7 +183,7 @@ void SDCardParse(){
 					 if(direction != 1 && direction != -1){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 turn(steps, 1800, direction);
+					 turn(steps, PERIODE, direction);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "emotion", strlen("emotion"))==0){
 					 uint32_t emotions = 0;
@@ -219,11 +220,21 @@ void SDCardParse(){
 						 }
 					 }
 				 }
+				 //check for mode change
+				 if(mode == MODE_DEMO){
+					 //change mode
+					 break;
+				 }
 			}
 			/* closing file */
 			FAT1_close(&fp);
 			#if DEBUG
-			  CLS1_SendStr("INFO: successfully finished parsing\n", CLS1_GetStdio()->stdOut);
+			if(mode == MODE_DEMO){
+				CLS1_SendStr("INFO: change mode\n", CLS1_GetStdio()->stdOut);
+			}
+			else{
+				CLS1_SendStr("INFO: successfully finished parsing\n", CLS1_GetStdio()->stdOut);
+			}
 			#endif
 			return; //finish parsing
 		}
@@ -237,6 +248,21 @@ void SDCardParse(){
 			read_buf[n]=0;
 		}
 	}
+}
+
+void changeMode(RunMode newMode){
+	mode = newMode;
+}
+RunMode getMode(void){
+	return mode;
+}
+
+void setDistance(uint32_t newDistance){
+	distance = newDistance;
+}
+
+void setTrigger(){
+	TRG1_AddTrigger(TRG1_DistanceMeasuring, 50, TrgCallback);
 }
 
 static void TrgCallback(void){
@@ -260,7 +286,7 @@ static void TrgCallback(void){
 		LedSetEmotions(EM_HAPPY);
 		(void)xSemaphoreGive(semLed);
 	}
-	TRG1_AddTrigger(TRG1_DistanceMeasuring, 50, TrgCallback);
+	setTrigger();
 }
 
 int readLineOffset(int pointer){
