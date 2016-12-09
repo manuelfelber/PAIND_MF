@@ -3,7 +3,7 @@
   <Header>
     <Name>PAIND</Name>
     <SavedBy>manuelwittmer</SavedBy>
-    <ModificationStamp>144</ModificationStamp>
+    <ModificationStamp>150</ModificationStamp>
     <Date>2016-09-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -29,7 +29,7 @@
     <UseExistingModules>true</UseExistingModules>
     <RenamePeripheries>false</RenamePeripheries>
     <Autodependency>true</Autodependency>
-    <ProjectCompNumb>448</ProjectCompNumb>
+    <ProjectCompNumb>454</ProjectCompNumb>
     <DelUnusedPreviouslyGenFiles>true</DelUnusedPreviouslyGenFiles>
     <GeneratedCodeFrozen>false</GeneratedCodeFrozen>
     <AssignInitComponentNameToPrph>true</AssignInitComponentNameToPrph>
@@ -4739,7 +4739,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>20000</Value>
+        <Value>8000</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -5010,7 +5010,7 @@
               <ItemSymbol>_MainTmg</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>20 ms</Value>
+              <Value>8 ms</Value>
               <RuntimeSetting>0</RuntimeSetting>
               <ReqDevPrescHigh>-1</ReqDevPrescHigh>
               <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -5036,7 +5036,7 @@
               <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
               <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
               <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-              <InitValue>20 ms</InitValue>
+              <InitValue>8 ms</InitValue>
               <Precision>5.0</Precision>
               <PrecInProc>true</PrecInProc>
               <LowLimit />
@@ -5356,7 +5356,7 @@
                     <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
                     <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
                     <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-                    <InitValue>20 ms</InitValue>
+                    <InitValue>8 ms</InitValue>
                     <Precision>5.0</Precision>
                     <PrecInProc>true</PrecInProc>
                     <LowLimit />
@@ -6523,7 +6523,7 @@
         <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
         <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
         <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-        <InitValue>20 ms</InitValue>
+        <InitValue>8 ms</InitValue>
         <Precision>5.0</Precision>
         <PrecInProc>true</PrecInProc>
         <LowLimit />
@@ -8591,7 +8591,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>20000</Value>
+        <Value>8000</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -8862,7 +8862,7 @@
               <ItemSymbol>_MainTmg</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>20 ms</Value>
+              <Value>8 ms</Value>
               <RuntimeSetting>0</RuntimeSetting>
               <ReqDevPrescHigh>-1</ReqDevPrescHigh>
               <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -8888,7 +8888,7 @@
               <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
               <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
               <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-              <InitValue>20 ms</InitValue>
+              <InitValue>8 ms</InitValue>
               <Precision>5.0</Precision>
               <PrecInProc>true</PrecInProc>
               <LowLimit />
@@ -9208,7 +9208,7 @@
                     <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
                     <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
                     <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-                    <InitValue>20 ms</InitValue>
+                    <InitValue>8 ms</InitValue>
                     <Precision>5.0</Precision>
                     <PrecInProc>true</PrecInProc>
                     <LowLimit />
@@ -10201,7 +10201,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>20000</Value>
+        <Value>8000</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -10472,7 +10472,7 @@
               <ItemSymbol>_MainTmg</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>20 ms</Value>
+              <Value>8 ms</Value>
               <RuntimeSetting>0</RuntimeSetting>
               <ReqDevPrescHigh>-1</ReqDevPrescHigh>
               <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -10498,7 +10498,7 @@
               <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
               <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
               <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-              <InitValue>20 ms</InitValue>
+              <InitValue>8 ms</InitValue>
               <Precision>5.0</Precision>
               <PrecInProc>true</PrecInProc>
               <LowLimit />
@@ -10818,7 +10818,7 @@
                     <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
                     <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
                     <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-                    <InitValue>20 ms</InitValue>
+                    <InitValue>8 ms</InitValue>
                     <Precision>5.0</Precision>
                     <PrecInProc>true</PrecInProc>
                     <LowLimit />
@@ -11811,7 +11811,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>20000</Value>
+        <Value>8000</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -12082,7 +12082,7 @@
               <ItemSymbol>_MainTmg</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>20 ms</Value>
+              <Value>8 ms</Value>
               <RuntimeSetting>0</RuntimeSetting>
               <ReqDevPrescHigh>-1</ReqDevPrescHigh>
               <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -12108,7 +12108,7 @@
               <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
               <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
               <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-              <InitValue>20 ms</InitValue>
+              <InitValue>8 ms</InitValue>
               <Precision>5.0</Precision>
               <PrecInProc>true</PrecInProc>
               <LowLimit />
@@ -12428,7 +12428,7 @@
                     <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
                     <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
                     <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-                    <InitValue>20 ms</InitValue>
+                    <InitValue>8 ms</InitValue>
                     <Precision>5.0</Precision>
                     <PrecInProc>true</PrecInProc>
                     <LowLimit />
@@ -13620,7 +13620,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>20000</Value>
+        <Value>8000</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -13891,7 +13891,7 @@
               <ItemSymbol>_MainTmg</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>20 ms</Value>
+              <Value>8 ms</Value>
               <RuntimeSetting>0</RuntimeSetting>
               <ReqDevPrescHigh>-1</ReqDevPrescHigh>
               <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -13917,7 +13917,7 @@
               <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
               <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
               <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-              <InitValue>20 ms</InitValue>
+              <InitValue>8 ms</InitValue>
               <Precision>5.0</Precision>
               <PrecInProc>true</PrecInProc>
               <LowLimit />
@@ -14237,7 +14237,7 @@
                     <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
                     <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
                     <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-                    <InitValue>20 ms</InitValue>
+                    <InitValue>8 ms</InitValue>
                     <Precision>5.0</Precision>
                     <PrecInProc>true</PrecInProc>
                     <LowLimit />
@@ -15230,7 +15230,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>20000</Value>
+        <Value>8000</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -15501,7 +15501,7 @@
               <ItemSymbol>_MainTmg</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>20 ms</Value>
+              <Value>8 ms</Value>
               <RuntimeSetting>0</RuntimeSetting>
               <ReqDevPrescHigh>-1</ReqDevPrescHigh>
               <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -15527,7 +15527,7 @@
               <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
               <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
               <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-              <InitValue>20 ms</InitValue>
+              <InitValue>8 ms</InitValue>
               <Precision>5.0</Precision>
               <PrecInProc>true</PrecInProc>
               <LowLimit />
@@ -15847,7 +15847,7 @@
                     <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
                     <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
                     <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-                    <InitValue>20 ms</InitValue>
+                    <InitValue>8 ms</InitValue>
                     <Precision>5.0</Precision>
                     <PrecInProc>true</PrecInProc>
                     <LowLimit />
