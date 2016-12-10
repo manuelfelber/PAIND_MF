@@ -27,16 +27,15 @@
 #define RIGHT       -1
 #define SMALL       5
 #define MEDIUM      15
-#define BIG         35
-#define PERIODE		1800
+#define BIG         30
+#define PERIODE		1800//1800//2500
 
+#define ROBO_PARSE_COMMAND_ENABLED         1
+/* predefined commands */
+#define DOT_CMD_HELP   "help"
+#define DOT_CMD_STATUS "status"
 
-
-void initRobo(void);
 void Robo_StepForward(int );
-void Robo_StepBack(int );
-void Robo_StepTime(int );
-void Robo_initPos(void);
 
 //-- Macro for converting from degrees to radians
 #define M_PI 3.14159
@@ -59,5 +58,7 @@ void flapping(float , int , int , int );
 void moveServos(int , int [] );
 void execute(int[4] , int[4] , int , double[4] , float );
 void oscillateServos(int[4] , int[4] , int , double [4], float );
+uint8_t Robo_ParseCommand(const unsigned char *, bool *, const CLS1_StdIOType *);
+static uint8_t PrintHelp(const CLS1_StdIOType *);
 
 #endif /* SOURCES_ROBO_H_ */

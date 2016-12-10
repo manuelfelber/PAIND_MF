@@ -19,6 +19,7 @@
 #include "Fuss_R.h"
 #include "Knie_L.h"
 #include "Knie_R.h"
+#include "Robo.h"
 
 #define PL_HAS_SD_CARD  1 /* if we have SD card support */
 
@@ -40,6 +41,9 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 #endif
 #if DOTMATRIX_PARSE_COMMAND_ENABLED
   Led_ParseCommand,
+#endif
+#if ROBO_PARSE_COMMAND_ENABLED
+  Robo_ParseCommand,
 #endif
 #if SERVO_PARSE_COMMAND_ENABLED
   Huft_L_ParseCommand,

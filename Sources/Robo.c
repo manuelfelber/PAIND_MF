@@ -7,38 +7,7 @@
 
 #include "Robo.h"
 
-
-void initRobo(void){
-	Robo_initPos();
-}
-
-void Robo_initPos(void){
-/*	SERVO1_MovePos(100,1); //Huft rechts
-	SERVO2_MovePos(130,1); //Huft links
-	SERVO3_MovePos(125,1);	//Fuss rechts
-	SERVO4_MovePos(125,1);	//Fuss links
-	while(SERVO1_IsMoving() & SERVO2_IsMoving() & SERVO3_IsMoving() & SERVO4_IsMoving()){}*/
-}
-
-
-void Robo_StepTime(int steps){
-/*
-	for(int a=0; a<steps; a++){
-		SERVO1_MovePos(170,500);
-		SERVO2_MovePos(170,500);
-		WAIT1_Waitms(2000);
-		SERVO3_MovePos(80,420);
-		SERVO4_MovePos(80,420);
-		WAIT1_Waitms(2000);//430
-		SERVO3_MovePos(180,900);
-		SERVO4_MovePos(180,900);
-		WAIT1_Waitms(2000);//80
-		SERVO1_MovePos(80,500);
-		SERVO2_MovePos(80,500);
-		WAIT1_Waitms(2000);//830
-	}*/
-}
-
+//old function for walking. Sets position with SetPos function of Servo in a for-Loop
 void Robo_StepForward(int steps){
 	int i = 0;
 	float m = 0.0;
@@ -78,17 +47,6 @@ void Robo_StepForward(int steps){
 			Fuss_R_SetPos(m);	//Fuss rechts
 			Fuss_L_SetPos(m);	//Fuss links
 		}
-	}
-}
-
-void Robo_StepBack(int steps){
-	int i = 0;
-	float m = 0.0;
-	bool phase = false;
-
-	for(int a=0; a<steps; a++){
-		WAIT1_Waitms(5);
-		m = (180.0-25.0); //todo
 	}
 }
 
@@ -388,7 +346,7 @@ void execute(int A[4], int O[4], int T, double phase_diff[4], float steps){
 	for(int i = 0; i < 4; i++){
 		attach(false, i);
 	}
-	steps += 0.8; //TEST
+	steps += 0.3; //TEST
 	int cycles=(int)steps;
 
 	//-- Execute complete cycles
@@ -467,4 +425,29 @@ void oscillateServos(int A[4], int O[4], int T, double phase_diff[4], float cycl
 			refresh(i);
 		}
 	}
+}
+
+uint8_t Robo_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io)
+{
+  if (UTIL1_strcmp((char*)cmd, DOT_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, "Robo help")==0) {
+    *handled = TRUE;
+    return PrintHelp(io);
+  } else if (UTIL1_strcmp((char*)cmd, "Robo walk")==0) {
+    CS1_CriticalVariable();
+    *handled = TRUE;
+    walk(1,PERIODE, 1);
+    return ERR_OK;
+  } else if (UTIL1_strcmp((char*)cmd, "Robo turn")==0) {
+    *handled = TRUE;
+    turn(1,PERIODE,1);
+    return ERR_OK;
+  }
+  return ERR_OK;
+}
+
+static uint8_t PrintHelp(const CLS1_StdIOType *io) {
+  CLS1_SendHelpStr((unsigned char*)"Robo", (unsigned char*)"Commands to control the robo functions\r\n", io->stdOut);
+  CLS1_SendHelpStr((unsigned char*)"  walk", (unsigned char*)"Let the Roboter walk 1 step\r\n", io->stdOut);
+  CLS1_SendHelpStr((unsigned char*)"  turn", (unsigned char*)"Let the Roboter turn 90°\r\n", io->stdOut);
+  return ERR_OK;
 }
