@@ -34,6 +34,11 @@ void SetPh(double Ph, int ServoNum){
 void attach(bool rev, int ServoNum){
 	//-- Attach the servo and move it to the home position
 	//_servo.write(90); //todo set servos to home pos
+	SetPosition(125,0);
+	SetPosition(125,1);
+	SetPosition(125,2);
+	SetPosition(125,3);
+
 
 	//-- Initialization of oscilator parameters
 	servo[ServoNum]._TS = 30;
@@ -96,9 +101,9 @@ bool next_sample(int ServoNum){
 /* Manual set of the position  */
 /******************************/
 
-void SetPosition(int position, int servoNumb)
+void SetPosition(int pos, int servoNumb)
 {
-	float pos = (float)position*1.4166666;
+	//float pos = (float)position*1.4166666;
 
 	switch(servoNumb){
 	case 0: Huft_R_SetPos((byte)pos);

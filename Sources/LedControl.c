@@ -265,7 +265,6 @@ uint8_t Led_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_Std
   } else if (UTIL1_strcmp((char*)cmd, "DOTMatrix eye")==0) {
     CS1_CriticalVariable();
     *handled = TRUE;
-
     CS1_EnterCritical();
     uint8_t val = LedShowEye(0,1);
     CS1_ExitCritical();

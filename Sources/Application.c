@@ -35,7 +35,7 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 		Fuss_L_SetPWMDutyUs(0);
 
 		//switch off 6V
-		Power6V_ClrVal();
+		//Power6V_ClrVal();
 		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
@@ -48,10 +48,10 @@ void APP_Run(void){
 	vQueueAddToRegistry(semLed, "Semaphore DotMatrix");
 	changeMode(MODE_SDCARD);
 
-	Power6V_SetVal();
+	//Power6V_SetVal();
 	SHELL_Init();
 	LedInit();
-	//US_Init();
+	US_Init();
 	initAccMonitoring();
 	initLowVoltage();
 

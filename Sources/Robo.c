@@ -433,7 +433,6 @@ uint8_t Robo_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
     *handled = TRUE;
     return PrintHelp(io);
   } else if (UTIL1_strcmp((char*)cmd, "Robo walk")==0) {
-    CS1_CriticalVariable();
     *handled = TRUE;
     walk(1,PERIODE, 1);
     return ERR_OK;
