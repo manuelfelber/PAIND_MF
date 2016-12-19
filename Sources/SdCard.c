@@ -276,8 +276,6 @@ static void TrgCallback(void){
 		    (void)xSemaphoreGive(semLed);
 			break;
 		case 1:
-			break;
-		case 2:
 			turn(5, 1200, 1);
 			break;
 		}
