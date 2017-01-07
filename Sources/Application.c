@@ -20,8 +20,8 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 	}
 
 	if(getMode() == MODE_DEMO){
-		//setDistance(40);
-		//setTrigger();
+		setDistance(40);
+		setTrigger();
 		while(1){
 			walk(3,PERIODE, 1);
 			turn(4, PERIODE, 1);

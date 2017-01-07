@@ -12,11 +12,11 @@
 
 static FIL fp;
 static uint8_t read_buf[90];
-uint32_t  distance, option;
+uint32_t  distance, option = 0;
 static int stack[3];
 static int stackPointer;
 static struct Functions parcedFunction[numberOfFunctionsAllowed];
-static RunMode mode;
+static RunMode mode = MODE_SDCARD;
 
 
 void SDCardParse(){
