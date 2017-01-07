@@ -6,7 +6,7 @@
  */
 #include "Application.h"				
 
-xSemaphoreHandle semLed;
+xSemaphoreHandle semLed, semUltrasonic;
 
 static portTASK_FUNCTION(mainApp, pvParameters) {
 	(void)pvParameters; /* parameter not used */
@@ -46,6 +46,13 @@ void APP_Run(void){
 		for(;;){} /* error */
 	}
 	vQueueAddToRegistry(semLed, "Semaphore DotMatrix");
+
+	semUltrasonic = xSemaphoreCreateBinary();
+	if (semUltrasonic==NULL) { /* semaphore creation failed */
+		for(;;){} /* error */
+	}
+	vQueueAddToRegistry(semUltrasonic, "Semaphore Ultrasonic");
+
 	changeMode(MODE_SDCARD);
 
 	//Power6V_SetVal();

@@ -23,6 +23,9 @@
 #include "LedControl.h"
 #include "Application.h"
 
+extern uint32_t  distance;
+extern uint32_t option;
+
 struct Functions{
 	int pointer;
 	unsigned long hash;

@@ -11,8 +11,6 @@
 
 #include "PE_LDD.h"
 #include "TU3.h"
-#include "WAIT1.h"
-#include "CLS1.h"
 
 typedef enum {
   ECHO_IDLE, /* device not used */
@@ -57,6 +55,7 @@ uint16_t US_Measure(void);
  * \brief Driver initialization routine.
  */
 void US_Init(void);
+
 static void USTrgCallback(void);
 
 

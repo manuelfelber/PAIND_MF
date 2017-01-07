@@ -30,5 +30,6 @@
 
 void APP_Run(void);
 extern xSemaphoreHandle semLed;
+extern xSemaphoreHandle semUltrasonic;
 
 #endif /* SOURCES_APPLICATION_H_ */

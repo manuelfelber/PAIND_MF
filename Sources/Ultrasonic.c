@@ -6,10 +6,37 @@
  *      Driver for the HC-SR04 and FRDM-KL25Z board
  */
 #include "Ultrasonic.h"
+#include "WAIT1.h"
+#include "CLS1.h"
+#include "LedControl.h"
 
 #define DEBUG 1
 
 static US_DeviceType usDevice; /* device handle for the ultrasonic device */
+
+static portTASK_FUNCTION(UltrasonicTask, pvParameters) {
+	for(;;){
+		xSemaphoreTake(semUltrasonic,portMAX_DELAY);
+		//__asm volatile("cpsie i"); /* enable interrupts */
+		uint16_t distanceMeasured = US_Measure();
+		//__asm volatile("cpsid i");  /* disable interrupts */
+		if(distanceMeasured < distance && distanceMeasured != 0){
+			switch(option){
+			case 0:
+				LedSetEmotions(EM_NEUTAL);
+			    (void)xSemaphoreGive(semLed);
+				break;
+			case 1:
+				turn(5, 1200, 1);
+				break;
+			}
+		}
+		else{
+			LedSetEmotions(EM_HAPPY);
+			(void)xSemaphoreGive(semLed);
+		}
+	}
+}
 
 void US_EventEchoOverflow(LDD_TUserData *UserDataPtr) {
   US_DeviceType *ptr = (US_DeviceType*)UserDataPtr;
@@ -86,4 +113,8 @@ void US_Init(void) {
   usDevice.capture = 0;
   usDevice.trigDevice = TRIG_Init(NULL);
   usDevice.echoDevice = TU3_Init(&usDevice);
+
+	if (FRTOS1_xTaskCreate(UltrasonicTask, "Ultrasonic", configMINIMAL_STACK_SIZE-100, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+	    for(;;){} //error
+	}
 }

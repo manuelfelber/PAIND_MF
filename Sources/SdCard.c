@@ -12,8 +12,7 @@
 
 static FIL fp;
 static uint8_t read_buf[90];
-static uint32_t  distance, option;
-static uint16_t distanceMeasured;
+uint32_t  distance, option;
 static int stack[3];
 static int stackPointer;
 static struct Functions parcedFunction[numberOfFunctionsAllowed];
@@ -241,7 +240,7 @@ void SDCardParse(){
 		else{
 			//unknown header!
 			#if DEBUG
-			  //CLS1_SendStr("INFO: unknown header!\n", CLS1_GetStdio()->stdOut);
+			  CLS1_SendStr("INFO: unknown header!\n", CLS1_GetStdio()->stdOut);
 			#endif
 		}
 		for(int n=0; n<sizeof(read_buf); n++){
@@ -253,6 +252,7 @@ void SDCardParse(){
 void changeMode(RunMode newMode){
 	mode = newMode;
 }
+
 RunMode getMode(void){
 	return mode;
 }
@@ -265,25 +265,8 @@ void setTrigger(){
 	TRG1_AddTrigger(TRG1_DistanceMeasuring, 50, TrgCallback);
 }
 
-static void TrgCallback(void){
-	__asm volatile("cpsie i"); /* enable interrupts */
-	distanceMeasured = US_Measure();
-	__asm volatile("cpsid i");  /* disable interrupts */
-	if(distanceMeasured < distance && distanceMeasured != 0){
-		switch(option){
-		case 0:
-			LedSetEmotions(EM_NEUTAL);
-		    (void)xSemaphoreGive(semLed);
-			break;
-		case 1:
-			turn(5, 1200, 1);
-			break;
-		}
-	}
-	else{
-		LedSetEmotions(EM_HAPPY);
-		(void)xSemaphoreGive(semLed);
-	}
+static void TrgCallback(void){  //SHOULD BE IN ULTRASONIC TASK OND SYNC WITH SEMAPHORE
+	(void)xSemaphoreGive(semUltrasonic);
 	setTrigger();
 }
 
