@@ -60,7 +60,8 @@ void SDCardParse(){
 					 if(pos > 255 || time < 0){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 Huft_L_SetPos(pos);
+					 //Huft_L_SetPos(pos);
+					 Huft_L_MovePos(pos,time);
 				 }
 				 if(UTIL1_strncmp(read_buf, "servo2", strlen("servo2"))==0){
 					 uint32_t pos = 0, time = 0;
@@ -74,7 +75,8 @@ void SDCardParse(){
 					 if(pos > 255 || time < 0){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 Huft_R_SetPos(pos);
+					 //Huft_R_SetPos(pos);
+					 Huft_R_MovePos(pos,time);
 				 }
 				 if(UTIL1_strncmp(read_buf, "servo3", strlen("servo3"))==0){
 					 uint32_t pos = 0, time = 0;
@@ -88,7 +90,8 @@ void SDCardParse(){
 					 if(pos > 255 || time < 0){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 Fuss_L_SetPos(pos);
+					 //Fuss_L_SetPos(pos);
+					 Fuss_L_MovePos(pos,time);
 				 }
 				 if(UTIL1_strncmp(read_buf, "servo4", strlen("servo4"))==0){
 					 uint32_t pos = 0, time = 0;
@@ -102,7 +105,8 @@ void SDCardParse(){
 					 if(pos > 255 || time < 0){ //check parameter range
 						 Err(errorCheckRange);
 					 }
-					 Fuss_R_SetPos(pos);
+					 //Fuss_R_SetPos(pos);
+					 Fuss_R_MovePos(pos,time);
 				 }
 				 else if(UTIL1_strncmp(read_buf, "ultrasonic", strlen("ultrasonic"))==0){
 					 //check distance periodically
