@@ -17,9 +17,7 @@ static US_DeviceType usDevice; /* device handle for the ultrasonic device */
 static portTASK_FUNCTION(UltrasonicTask, pvParameters) {
 	for(;;){
 		xSemaphoreTake(semUltrasonic,portMAX_DELAY);
-		//__asm volatile("cpsie i"); /* enable interrupts */
 		uint16_t distanceMeasured = US_Measure();
-		//__asm volatile("cpsid i");  /* disable interrupts */
 		if(distanceMeasured < distance && distanceMeasured != 0){
 			switch(option){
 			case 0:
@@ -27,7 +25,7 @@ static portTASK_FUNCTION(UltrasonicTask, pvParameters) {
 			    (void)xSemaphoreGive(semLed);
 				break;
 			case 1:
-				turn(5, 1200, 1);
+				turn(3, 1200, 1);
 				break;
 			}
 		}
@@ -78,7 +76,6 @@ uint16_t US_Measure_us(void) {
   /* send 10us pulse on TRIG line. */
   TRIG_SetVal(usDevice.trigDevice);
   WAIT1_Waitus(10);
-  //FRTOS1_vTaskDelay(0.1/portTICK_RATE_MS);
   usDevice.state = ECHO_TRIGGERED;
   TRIG_ClrVal(usDevice.trigDevice);
   while(usDevice.state!=ECHO_FINISHED) {
@@ -114,7 +111,7 @@ void US_Init(void) {
   usDevice.trigDevice = TRIG_Init(NULL);
   usDevice.echoDevice = TU3_Init(&usDevice);
 
-	if (FRTOS1_xTaskCreate(UltrasonicTask, "Ultrasonic", configMINIMAL_STACK_SIZE-100, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+	if (FRTOS1_xTaskCreate(UltrasonicTask, "Ultrasonic", configMINIMAL_STACK_SIZE-100, NULL, tskIDLE_PRIORITY+3, NULL) != pdPASS) {
 	    for(;;){} //error
 	}
 }

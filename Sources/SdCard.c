@@ -22,11 +22,13 @@ static RunMode mode = MODE_SDCARD;
 void SDCardParse(){
 	int number = 0, stackPointer = 0;
 	distance = 0;
-	/* open file */
-	uint8_t status = FR_DISK_ERR;
-	while(status != FR_OK){
-		status = FAT1_open(&fp, "./prog.txt", FA_READ);
+	uint8_t status = FR_DISK_ERR, cntr = 0;
+
+	status = FAT1_open(&fp, "./prog.txt", FA_READ);
+	if(status != FR_OK) {
+		return; //error opening FS
 	}
+
 
 	#if DEBUG
 	  CLS1_SendStr("INFO: start parsing\n", CLS1_GetStdio()->stdOut);

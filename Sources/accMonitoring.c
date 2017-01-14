@@ -6,6 +6,7 @@
  */
 
 #include "accMonitoring.h"
+#include "Power6V.h"
 
 
 
@@ -13,17 +14,19 @@ static volatile AkkMonStateType akkMonState; /* state machine state */
 
 void initAccMonitoring(void){
 	akkMonState = STATE_INIT;
-	if (FRTOS1_xTaskCreate(AccMonitoringTask, "AccMonitoring", configMINIMAL_STACK_SIZE-60, NULL, tskIDLE_PRIORITY+2, NULL) != pdPASS) {
+	if (FRTOS1_xTaskCreate(AccMonitoringTask, "AccMonitoring", configMINIMAL_STACK_SIZE-60, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
 		for(;;){} //error
 	}
 }
 
 void AccMonSetAlarm(){
 	akkMonState = STATE_FALL;
+	Power6V_ClrVal();
 }
 
 void AccMonClearAlarm(){
 	akkMonState = STATE_UPRIGHT;
+	Power6V_SetVal();
 }
 
 uint16_t AccMonMeasure(){
@@ -58,7 +61,7 @@ static void AccMonitoringTask(void *pvParameters){
 			//init Acc Sensor
 			res = MMA1_Init();
 			if(res != ERR_OK){
-				for(;;){}
+				for(;;){} //Error
 			}
 			MMA1_CalibrateZ1g();
 			akkMonState = STATE_UPRIGHT;
