@@ -23,19 +23,21 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 		setDistance(40);
 		setTrigger();
 		while(1){
-			walk(3,PERIODE, 1);
-			turn(4, PERIODE, 1);
+			//walk(3,PERIODE, 1);
+			//turn(4, PERIODE, 1);
 		}
 	}
 
-	for(;;) {
-	    Huft_L_SetPWMDutyUs(0);
-	    Huft_R_SetPWMDutyUs(0);
-		Fuss_R_SetPWMDutyUs(0);
-		Fuss_L_SetPWMDutyUs(0);
+    Huft_L_SetPWMDutyUs(0);
+    Huft_R_SetPWMDutyUs(0);
+	Fuss_R_SetPWMDutyUs(0);
+	Fuss_L_SetPWMDutyUs(0);
 
-		//switch off 6V
-		//Power6V_ClrVal();
+	//switch off 6V
+	Power6V_ClrVal();
+
+	//finish, do nothing
+	for(;;) {
 		FRTOS1_vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
@@ -55,7 +57,7 @@ void APP_Run(void){
 
 	changeMode(MODE_SDCARD);
 
-	//Power6V_SetVal();
+	Power6V_SetVal();
 	SHELL_Init();
 	LedInit();
 	US_Init();
