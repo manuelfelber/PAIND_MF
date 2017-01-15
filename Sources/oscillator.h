@@ -57,11 +57,12 @@ void SetA( int , int );
 void SetO( int , int );
 void SetPh(double , int );
 void attach(bool , int );
-void detach(void);
 void SetT(unsigned int , int );
 bool next_sample(int );
 void SetPosition(int , int );
 void refresh(int );
+void disableGuard(void);
+void enableGuard(void);
 
 
 #endif /* SOURCES_OSCILLATOR_H_ */

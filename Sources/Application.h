@@ -31,5 +31,6 @@
 void APP_Run(void);
 extern xSemaphoreHandle semLed;
 extern xSemaphoreHandle semUltrasonic;
+extern xSemaphoreHandle mutRoboGuard;
 
 #endif /* SOURCES_APPLICATION_H_ */

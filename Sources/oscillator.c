@@ -7,9 +7,12 @@
 
 
 #include "oscillator.h"
+#include "PE_Types.h"
+#include "Application.h"
 
 
 struct Servos servo[4];
+static bool guard = false;
 
 //setter and getter methodes
 void SetA( int A, int ServoNum){
@@ -33,12 +36,10 @@ void SetPh(double Ph, int ServoNum){
 //-- is connected
 void attach(bool rev, int ServoNum){
 	//-- Attach the servo and move it to the home position
-	//_servo.write(90); //todo set servos to home pos
 	SetPosition(125,0);
 	SetPosition(125,1);
 	SetPosition(125,2);
 	SetPosition(125,3);
-
 
 	//-- Initialization of oscilator parameters
 	servo[ServoNum]._TS = 30;
@@ -59,12 +60,6 @@ void attach(bool rev, int ServoNum){
 	servo[ServoNum]._rev = rev;
 }
 
-//-- Detach an oscillator from his servo
-void detach()
-{
-   //-- If the oscillator is attached, detach it.
-
-}
 
 /*************************************/
 /* Set the oscillator period, in ms  */
@@ -84,16 +79,6 @@ void SetT(unsigned int T, int ServoNum){
 //-- the last sample was taken
 bool next_sample(int ServoNum){
 	FRTOS1_vTaskDelay(10/portTICK_RATE_MS);
-	/*//-- Read current time
-	 servo[ServoNum]._currentMillis = cntr;
-
-	//-- Check if the timeout has passed
-	if(servo[ServoNum]._currentMillis - servo[ServoNum]._previousMillis > servo[ServoNum]._TS) {
-		servo[ServoNum]._previousMillis = servo[ServoNum]._currentMillis;
-		return true;
-	}
-
-	return false;*/
 	return true;
 }
 
@@ -126,8 +111,8 @@ void SetPosition(int pos, int servoNumb)
 void refresh(int servoNum){
 	//-- Only When TS milliseconds have passed, the new sample is obtained
 	FRTOS1_vTaskDelay(10/portTICK_RATE_MS);
-	//if (next_sample(servoNum)) {
 
+	if(!guard){ //do nothing if guard is on (because of fall)
 		//-- If the oscillator is not stopped, calculate the servo position
 		if (!servo[servoNum]._stop) {
 			//-- Sample the sine function and set the servo pos
@@ -158,6 +143,24 @@ void refresh(int servoNum){
 		//-- It is always increased, even when the oscillator is stop
 		//-- so that the coordination is always kept
 		servo[servoNum]._phase = servo[servoNum]._phase + servo[servoNum]._inc;
-	//}
+	}
+}
+
+void enableGuard(void){
+	xSemaphoreTakeFromISR(mutRoboGuard, NULL);
+	//CS1_CriticalVariable();
+	//CS1_EnterCritical();
+	guard = true;
+	//CS1_ExitCritical();
+	xSemaphoreGive(mutRoboGuard);
+}
+
+void disableGuard(void){
+	xSemaphoreTakeFromISR(mutRoboGuard, NULL);
+	//CS1_CriticalVariable();
+	//CS1_EnterCritical();
+	guard = false;
+	//CS1_ExitCritical();
+	xSemaphoreGive(mutRoboGuard);
 }
 

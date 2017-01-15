@@ -6,7 +6,7 @@
  */
 #include "Application.h"				
 
-xSemaphoreHandle semLed, semUltrasonic;
+xSemaphoreHandle semLed, semUltrasonic, mutRoboGuard;
 
 static portTASK_FUNCTION(mainApp, pvParameters) {
 	(void)pvParameters; /* parameter not used */
@@ -22,10 +22,10 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 	if(getMode() == MODE_DEMO){
 		setDistance(40);
 		setTrigger();
-		while(1){
+		//while(1){
 			//walk(3,PERIODE, 1);
 			//turn(4, PERIODE, 1);
-		}
+		//}
 	}
 
     Huft_L_SetPWMDutyUs(0);
@@ -43,17 +43,27 @@ static portTASK_FUNCTION(mainApp, pvParameters) {
 }
 
 void APP_Run(void){
+	//Binary Semaphore for DotMatrix synchronisation
 	semLed = xSemaphoreCreateBinary();
-	if (semLed==NULL) { /* semaphore creation failed */
+	if (semLed == NULL) { /* semaphore creation failed */
 		for(;;){} /* error */
 	}
 	vQueueAddToRegistry(semLed, "Semaphore DotMatrix");
 
+	//Binary Semaphore for Ultrasonic synchronisation
 	semUltrasonic = xSemaphoreCreateBinary();
-	if (semUltrasonic==NULL) { /* semaphore creation failed */
+	if (semUltrasonic == NULL) { /* semaphore creation failed */
 		for(;;){} /* error */
 	}
 	vQueueAddToRegistry(semUltrasonic, "Semaphore Ultrasonic");
+
+	//Mutex for Servo Action Guard
+	mutRoboGuard = xSemaphoreCreateMutex();
+	if(mutRoboGuard == NULL ){ /* semaphore creation failed */
+		for(;;){} /* error */
+	}
+	vQueueAddToRegistry(mutRoboGuard, "Mutex Robo Guard");
+
 
 	changeMode(MODE_SDCARD);
 
