@@ -19,13 +19,13 @@ static portTASK_FUNCTION(UltrasonicTask, pvParameters) {
 		xSemaphoreTake(semUltrasonic,portMAX_DELAY);
 		uint16_t distanceMeasured = US_Measure();
 		if(distanceMeasured < distance && distanceMeasured != 0){
-			switch(option){
+			switch(option){ //option choosen in textfile
 			case 0:
 				LedSetEmotions(EM_NEUTAL);
 			    (void)xSemaphoreGive(semLed);
 				break;
 			case 1:
-				turn(3, 1200, 1);
+				turn(7, 1200, 1); //turn away from objekt
 				break;
 			}
 		}
@@ -111,7 +111,7 @@ void US_Init(void) {
   usDevice.trigDevice = TRIG_Init(NULL);
   usDevice.echoDevice = TU3_Init(&usDevice);
 
-	if (FRTOS1_xTaskCreate(UltrasonicTask, "Ultrasonic", configMINIMAL_STACK_SIZE-100, NULL, tskIDLE_PRIORITY+3, NULL) != pdPASS) {
+	if (FRTOS1_xTaskCreate(UltrasonicTask, "Ultrasonic", configMINIMAL_STACK_SIZE-100, NULL, tskIDLE_PRIORITY+2, NULL) != pdPASS) {
 	    for(;;){} //error
 	}
 }

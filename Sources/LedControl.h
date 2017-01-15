@@ -39,7 +39,6 @@
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"
-#include "stdbool.h"
 #include "SM1.h"
 #include "SPI_CS.h"
 #include "FRTOS1.h"

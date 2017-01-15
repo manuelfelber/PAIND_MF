@@ -31,7 +31,7 @@ void initLowVoltage(){
 		"LowVoltage", /* task name for kernel awareness debugging */
 		configMINIMAL_STACK_SIZE-60, /* task stack size */
 		(void*)NULL, /* optional task startup argument */
-		tskIDLE_PRIORITY+4,  /* initial priority */
+		tskIDLE_PRIORITY,  /* initial priority */
 		(xTaskHandle*)NULL /* optional task handle to create */
 	  ) != pdPASS) {
 	/*lint -e527 */

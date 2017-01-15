@@ -28,7 +28,7 @@
 #define SMALL       5
 #define MEDIUM      15
 #define BIG         30
-#define PERIODE		2000//1800//2500
+#define PERIODE		2000 //1800//2500
 
 #define ROBO_PARSE_COMMAND_ENABLED         1
 /* predefined commands */

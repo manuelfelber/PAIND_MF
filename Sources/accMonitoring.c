@@ -7,26 +7,34 @@
 
 #include "accMonitoring.h"
 #include "Power6V.h"
+#include "oscillator.h"
 
 
-
-static volatile AkkMonStateType akkMonState; /* state machine state */
+static AkkMonStateType akkMonState; /* state machine state */
 
 void initAccMonitoring(void){
 	akkMonState = STATE_INIT;
-	if (FRTOS1_xTaskCreate(AccMonitoringTask, "AccMonitoring", configMINIMAL_STACK_SIZE-60, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+	if (FRTOS1_xTaskCreate(AccMonitoringTask, "AccMonitoring", configMINIMAL_STACK_SIZE-60, NULL, tskIDLE_PRIORITY+3, NULL) != pdPASS) {
 		for(;;){} //error
 	}
 }
 
 void AccMonSetAlarm(){
+	CS1_CriticalVariable();
+	CS1_EnterCritical();
 	akkMonState = STATE_FALL;
+	CS1_ExitCritical();
 	Power6V_ClrVal();
+	enableGuard();
 }
 
 void AccMonClearAlarm(){
+	CS1_CriticalVariable();
+	CS1_EnterCritical();
 	akkMonState = STATE_UPRIGHT;
+	CS1_ExitCritical();
 	Power6V_SetVal();
+	disableGuard();
 }
 
 uint16_t AccMonMeasure(){
@@ -34,10 +42,10 @@ uint16_t AccMonMeasure(){
 	int16_t yVal = 0;
 	int16_t zVal = 0;
 	//uint8_t buf[6];
-	xVal =  MMA1_GetX();
-	yVal =  MMA1_GetY();
+	//xVal =  MMA1_GetX();
+	//yVal =  MMA1_GetY();
 	zVal =  MMA1_GetZ();
-	FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
+	//FRTOS1_vTaskDelay(100/portTICK_RATE_MS);
 	/*CLS1_SendStr("X:", CLS1_GetStdio()->stdOut);
 	UTIL1_Num16uToStrFormatted(buf, sizeof(buf), xVal, ' ', 5);
 	CLS1_SendStr(buf, CLS1_GetStdio()->stdOut);
@@ -74,6 +82,8 @@ static void AccMonitoringTask(void *pvParameters){
 			}
 			break;
 		case STATE_FALL:
+			Power6V_ClrVal();
+			enableGuard();
 			Buzzer_SetVal();
 			FRTOS1_vTaskDelay(500/portTICK_RATE_MS);
 			Buzzer_ClrVal();

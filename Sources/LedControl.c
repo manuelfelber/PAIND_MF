@@ -125,18 +125,10 @@ static Emotion LedEmotions;
 
 static portTASK_FUNCTION(DotMatrixTask, pvParameters) {
 	LedControl(4);
-	//LedShowEye(3,0);
-	//LedShowMouth(0,EM_HAPPY);*/
 
-
-	for(;;){
-
+	for(;;){ //wait for changing DotMatrizes
 		xSemaphoreTake(semLed,portMAX_DELAY);
 		LedShowEmotion(LedEmotions);
-		/*for(int i = 0; i < 3;i+=2) {
-			FRTOS1_vTaskDelay(2000/portTICK_RATE_MS);
-			LedShowEye(2,i);
-		}*/
 	}
 }
 
